@@ -1,0 +1,36 @@
+---
+import { FolderSimpleIcon } from "@phosphor-icons/react/ssr";
+
+interface Props {
+  titulo: string;
+  parrafos: string[];
+}
+
+const { titulo, parrafos } = Astro.props;
+const [primero, ...resto] = parrafos;
+const idHoja = `hoja-${titulo.toLowerCase().replace(/\W+/g, "-")}`;
+---
+
+<div class="carpeta" data-carpeta data-abierta="false">
+  <div class="carpeta-fondo" aria-hidden="true"></div>
+  <div class="carpeta-hoja-atras" aria-hidden="true"></div>
+
+  <div class="carpeta-hoja" id={idHoja}>
+    <p class="max-w-[34ch] font-display text-entrada font-semibold md:text-titulo-3">{primero}</p>
+    <div class="mt-5 flex max-w-[58ch] flex-col gap-4 text-tinta-suave">
+      {resto.map((parrafo) => <p>{parrafo}</p>)}
+    </div>
+  </div>
+
+  <button type="button" class="carpeta-frente" aria-expanded="false" aria-controls={idHoja}>
+    <span class="carpeta-sello" aria-hidden="true">S.</span>
+    <span class="flex items-center gap-3 font-display text-entrada font-bold">
+      <FolderSimpleIcon size={22} aria-hidden="true" />
+      {titulo}
+    </span>
+    <span class="font-mono text-etiqueta">
+      <span class="carpeta-accion-abrir">Abrir</span>
+      <span class="carpeta-accion-cerrar">Cerrar</span>
+    </span>
+  </button>
+</div>

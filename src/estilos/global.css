@@ -16,6 +16,11 @@
   --linea-fuerte: #6a6c74;
   --acento: #d9dade;
   --sobre-acento: #111214;
+  --carpeta-atras: #3a3c42;
+  --carpeta-frente: #4b4d54;
+  --papel: #e6e7ea;
+  --tinta: #151618;
+  --tinta-suave: #4f5157;
 }
 
 :root[data-tema="claro"] {
@@ -29,6 +34,11 @@
   --linea-fuerte: #7a7d85;
   --acento: #26272b;
   --sobre-acento: #eeeff1;
+  --carpeta-atras: #b3b6bd;
+  --carpeta-frente: #c5c8ce;
+  --papel: #fbfbfc;
+  --tinta: #151618;
+  --tinta-suave: #54565c;
 }
 
 @theme {
@@ -89,6 +99,9 @@
   --color-linea-fuerte: var(--linea-fuerte);
   --color-acento: var(--acento);
   --color-sobre-acento: var(--sobre-acento);
+  --color-papel: var(--papel);
+  --color-tinta: var(--tinta);
+  --color-tinta-suave: var(--tinta-suave);
 }
 
 @layer base {
@@ -559,6 +572,155 @@ html.cambiando-tema * {
   }
 }
 
+/* ---------- Sobre mí: la carpeta ----------
+  El frente gira sobre su borde de abajo, hacia quien mira, y deja ver las hojas.
+  Con mouse se abre al pasar por encima; con clic o teclado queda abierta. */
+.carpeta {
+  /* Lo que asoma de la hoja con la carpeta cerrada: exactamente su primera línea. */
+  --primera-linea: calc(var(--text-entrada) * 1.5);
+  position: relative;
+  padding: 2.5rem 1rem 1rem;
+  perspective: 1600px;
+  perspective-origin: 50% 0%;
+  cursor: pointer;
+}
+
+.carpeta-fondo {
+  position: absolute;
+  inset: 1.25rem 0 0;
+  border-radius: var(--radius-marco);
+  background: var(--carpeta-atras);
+}
+
+/* La pestaña de arriba a la izquierda, con el borde derecho inclinado. */
+.carpeta-fondo::before {
+  content: "";
+  position: absolute;
+  top: -1.125rem;
+  left: 0;
+  width: min(40%, 12rem);
+  height: 1.5rem;
+  border-radius: var(--radius-marco) var(--radius-marco) 0 0;
+  background: var(--carpeta-atras);
+  clip-path: polygon(0 0, 86% 0, 100% 100%, 0 100%);
+}
+
+.carpeta-hoja {
+  position: relative;
+  z-index: 1;
+  padding: 1.5rem;
+  border-radius: var(--radius-base);
+  background: var(--papel);
+  color: var(--tinta);
+  box-shadow: 0 1px 3px color-mix(in oklab, black 25%, transparent);
+  transition: transform var(--duracion-larga) var(--ease-movimiento);
+}
+
+.carpeta-hoja-atras {
+  position: absolute;
+  inset: 2.5rem 1rem 1rem;
+  z-index: 0;
+  border-radius: var(--radius-base);
+  background: color-mix(in oklab, var(--papel) 82%, var(--tinta));
+  transform: rotate(-2.5deg) translate3d(0, 0.35rem, 0);
+  transition: transform var(--duracion-larga) var(--ease-movimiento);
+}
+
+@media (min-width: 768px) {
+  .carpeta {
+    --primera-linea: calc(var(--text-titulo-3) * 1.2);
+  }
+}
+
+.carpeta-frente {
+  position: absolute;
+  inset: calc(4rem + var(--primera-linea) + 0.3rem) 0 0;
+  z-index: 2;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.25rem 1.5rem;
+  border-radius: var(--radius-marco);
+  background: linear-gradient(
+    to bottom,
+    color-mix(in oklab, var(--carpeta-frente) 88%, white),
+    var(--carpeta-frente) 22%
+  );
+  box-shadow:
+    inset 0 1px 0 color-mix(in oklab, white 22%, transparent),
+    0 -0.75rem 1.5rem -1rem color-mix(in oklab, black 55%, transparent);
+  color: var(--texto);
+  cursor: pointer;
+  transform-origin: 50% 100%;
+  backface-visibility: hidden;
+  transition:
+    transform var(--duracion-larga) var(--ease-movimiento),
+    opacity var(--duracion-media) var(--ease-salida);
+}
+
+/* El sello grabado en el frente, como en las carpetas del sistema. */
+.carpeta-sello {
+  position: absolute;
+  inset: 0 0 3rem;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-display);
+  font-size: clamp(4.5rem, 3rem + 6vw, 8rem);
+  font-weight: 800;
+  letter-spacing: -0.05em;
+  color: color-mix(in oklab, var(--carpeta-frente) 84%, black);
+  text-shadow: 0 1px 0 color-mix(in oklab, var(--carpeta-frente) 70%, white);
+  pointer-events: none;
+}
+
+.carpeta-frente:focus-visible {
+  outline-offset: 4px;
+  border-radius: var(--radius-marco);
+}
+
+.carpeta-accion-cerrar,
+.carpeta[data-abierta="true"] .carpeta-accion-abrir {
+  display: none;
+}
+
+.carpeta[data-abierta="true"] .carpeta-accion-cerrar {
+  display: inline;
+}
+
+/* Abierta, el frente no recibe clics: el clic cae en la hoja y la carpeta decide. */
+.carpeta[data-abierta="true"] .carpeta-frente,
+html:not(.js) .carpeta-frente {
+  transform: rotateX(-80deg);
+  pointer-events: none;
+}
+
+.carpeta[data-abierta="true"] .carpeta-hoja,
+html:not(.js) .carpeta-hoja {
+  transform: translate3d(0, -0.5rem, 0);
+}
+
+.carpeta[data-abierta="true"] .carpeta-hoja-atras {
+  transform: rotate(-4deg) translate3d(-0.25rem, -0.25rem, 0);
+}
+
+/* Con mouse, una pausa corta antes de abrir para que no se abra solo con pasar de largo. */
+@media (hover: hover) and (pointer: fine) {
+  .carpeta:hover .carpeta-frente {
+    transform: rotateX(-80deg);
+    pointer-events: none;
+    transition-delay: 90ms;
+  }
+
+  .carpeta:hover .carpeta-hoja {
+    transform: translate3d(0, -0.5rem, 0);
+  }
+
+  .carpeta:hover .carpeta-hoja-atras {
+    transform: rotate(-4deg) translate3d(-0.25rem, -0.25rem, 0);
+  }
+}
+
 /* ---------- Demo de ordenamiento ---------- */
 .barra-orden {
   flex: 1;
@@ -647,7 +809,7 @@ fieldset:disabled .chip {
   width: 3rem;
   height: 3rem;
   border: 1px solid var(--linea-fuerte);
-  border-radius: var(--radius-base);
+  border-radius: 50%;
   background: var(--fondo);
   color: var(--texto-suave);
   transition:
@@ -913,6 +1075,26 @@ html:not(.js) .paso::after {
     flex-wrap: wrap;
     width: auto;
     animation: none;
+  }
+
+  /* La carpeta no gira: el frente se desvanece y deja ver las hojas. */
+  .carpeta-frente,
+  .carpeta-hoja,
+  .carpeta-hoja-atras {
+    transition-property: opacity;
+  }
+
+  .carpeta[data-abierta="true"] .carpeta-frente,
+  .carpeta:hover .carpeta-frente {
+    transform: none;
+    opacity: 0;
+  }
+
+  .carpeta[data-abierta="true"] .carpeta-hoja,
+  .carpeta[data-abierta="true"] .carpeta-hoja-atras,
+  .carpeta:hover .carpeta-hoja,
+  .carpeta:hover .carpeta-hoja-atras {
+    transform: none;
   }
 
   .cinta-copia {

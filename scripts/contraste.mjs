@@ -37,6 +37,9 @@ const pares = [
   ["acento", "fondo", 4.5],
   ["acento", "superficie", 4.5],
   ["sobre-acento", "acento", 4.5],
+  ["tinta", "papel", 4.5],
+  ["tinta-suave", "papel", 4.5],
+  ["texto", "carpeta-frente", 4.5],
   ["linea-fuerte", "fondo", 3],
   ["linea-fuerte", "superficie", 3],
 ];
