@@ -35,12 +35,13 @@ Todo el contenido vive en `src/datos/`, un archivo por tema. No hay que tocar co
 | Nombre, correo, WhatsApp, GitHub, LinkedIn, tiempo de respuesta | `src/datos/perfil.ts` |
 | Los párrafos de "Sobre mí" y cómo aprendí | `src/datos/sobre-mi.ts` |
 | Los proyectos | `src/datos/proyectos.ts` |
-| Las tarjetas de "Lo que sé hacer" | `src/datos/habilidades.ts` |
-| La cinta de logos y lo que estoy aprendiendo | `src/datos/stack.ts` |
+| Las tecnologías, por categoría, y la cinta de logos | `src/datos/tecnologias.ts` |
 | Los principios de "Cómo trabajo" | `src/datos/principios.ts` |
 
-Los logos de tecnologías salen de Simple Icons. Para usar uno nuevo, se agrega en
-`src/lib/logos.ts` y después se puede nombrar desde cualquier archivo de datos.
+Los logos de tecnologías son los originales a color de [devicon](https://devicon.dev) (licencia
+MIT) y viven en `public/logos/`. Para usar uno nuevo, se copia su SVG ahí, se registra en
+`src/lib/logos.ts` y después se puede nombrar desde cualquier archivo de datos. Si el logo es negro
+o muy oscuro, se marca con `oscuro: true` para que se aclare en el modo oscuro.
 
 ## Publicarla
 
@@ -81,8 +82,8 @@ cuatro duraciones.
   mouse. En pantallas táctiles, un toque manda una onda.
 - La navbar se vuelve una barra flotante al bajar, con una línea que marca cuánto se ha leído.
 - El cambio de tema se revela en un círculo que crece desde el botón (View Transitions).
-- Las secciones aparecen al entrar en pantalla, los principios se encienden en orden y los logos
-  pasan en una cinta.
+- Las secciones aparecen al entrar en pantalla, las tecnologías entran en cascada, los principios
+  se encienden en orden y los logos pasan en una cinta que no se detiene.
 - Las tarjetas tienen un brillo que sigue al mouse, las de proyectos se inclinan un poco y los
   botones principales se corren hacia el puntero.
 
