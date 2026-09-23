@@ -4,7 +4,7 @@ import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
-  site: "https://santiagosantofimio.pages.dev",
+  site: "https://santofimiodev.pages.dev",
   integrations: [react(), sitemap()],
   vite: {
     plugins: [tailwindcss()],
