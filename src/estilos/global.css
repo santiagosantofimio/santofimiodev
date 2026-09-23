@@ -1,0 +1,314 @@
+@import "tailwindcss";
+
+/*
+  Colores. Oscuro es el modo por defecto (también sin JavaScript) y el claro
+  se activa con data-tema="claro" en <html>. Cada par de texto y fondo se
+  verifica con `npm run contraste` antes de cambiar un valor.
+*/
+:root {
+  color-scheme: dark;
+  --fondo: #15120f;
+  --superficie: #1f1b17;
+  --texto: #f1e9da;
+  --texto-suave: #b3a894;
+  --linea: #2e2822;
+  --linea-fuerte: #756a5c;
+  --acento: #ff5a36;
+  --sobre-acento: #15120f;
+}
+
+:root[data-tema="claro"] {
+  color-scheme: light;
+  --fondo: #f0eee9;
+  --superficie: #e7e4dd;
+  --texto: #1a1612;
+  --texto-suave: #5d554b;
+  --linea: #d9d5cc;
+  --linea-fuerte: #857c71;
+  --acento: #bb2c13;
+  --sobre-acento: #fbfaf7;
+}
+
+@theme {
+  --color-*: initial;
+  --radius-*: initial;
+  --font-*: initial;
+
+  --font-display: "Schibsted Grotesk Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-cuerpo: "Geist Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, "SFMono-Regular", monospace;
+
+  /* Escala tipográfica: fluida en los títulos, fija en lo que se lee de corrido. */
+  --text-etiqueta: 0.8125rem;
+  --text-etiqueta--line-height: 1.4;
+  --text-pequeno: 0.9375rem;
+  --text-pequeno--line-height: 1.5;
+  --text-cuerpo: 1.0625rem;
+  --text-cuerpo--line-height: 1.6;
+  --text-entrada: clamp(1.125rem, 1.02rem + 0.45vw, 1.375rem);
+  --text-entrada--line-height: 1.5;
+  --text-titulo-3: clamp(1.375rem, 1.18rem + 0.85vw, 1.875rem);
+  --text-titulo-3--line-height: 1.2;
+  --text-titulo-3--letter-spacing: -0.015em;
+  --text-titulo-2: clamp(2.125rem, 1.45rem + 2.9vw, 3.75rem);
+  --text-titulo-2--line-height: 1.05;
+  --text-titulo-2--letter-spacing: -0.03em;
+  --text-titulo-1: clamp(2.75rem, 1.2rem + 5.2vw, 5.75rem);
+  --text-titulo-1--line-height: 0.98;
+  --text-titulo-1--letter-spacing: -0.045em;
+
+  /* Esquinas: un solo radio para todo lo que tiene borde. Sin píldoras. */
+  --radius-base: 0.5rem;
+
+  /* Espaciado: la escala de Tailwind (múltiplos de 4 px) más dos medidas de página. */
+  --spacing-margen: clamp(1.25rem, 0.6rem + 2.8vw, 3rem);
+  --spacing-seccion: clamp(5rem, 3.2rem + 7vw, 9.5rem);
+
+  /* Movimiento: una curva de salida propia y tres duraciones. */
+  --ease-salida: cubic-bezier(0.2, 0.85, 0.25, 1);
+  --duracion-corta: 160ms;
+  --duracion-media: 360ms;
+  --duracion-larga: 720ms;
+}
+
+@theme inline {
+  --color-fondo: var(--fondo);
+  --color-superficie: var(--superficie);
+  --color-texto: var(--texto);
+  --color-texto-suave: var(--texto-suave);
+  --color-linea: var(--linea);
+  --color-linea-fuerte: var(--linea-fuerte);
+  --color-acento: var(--acento);
+  --color-sobre-acento: var(--sobre-acento);
+}
+
+@layer base {
+  html {
+    background-color: var(--fondo);
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    min-height: 100dvh;
+    background-color: var(--fondo);
+    color: var(--texto);
+    font-family: var(--font-cuerpo);
+    font-size: var(--text-cuerpo);
+    line-height: var(--text-cuerpo--line-height);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    /* Red de seguridad contra el scroll horizontal. overflow-y explícito para no romper sticky. */
+    overflow-x: hidden;
+    overflow-y: visible;
+  }
+
+  ::selection {
+    background-color: var(--acento);
+    color: var(--sobre-acento);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--acento);
+    outline-offset: 3px;
+    border-radius: var(--radius-base);
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+}
+
+/* Transición de colores al cambiar de tema, solo mientras dura el cambio. */
+html.cambiando-tema,
+html.cambiando-tema * {
+  transition:
+    background-color var(--duracion-media) var(--ease-salida),
+    color var(--duracion-media) var(--ease-salida),
+    border-color var(--duracion-media) var(--ease-salida) !important;
+}
+
+/*
+  Apariciones al hacer scroll. En escritorio basta una transición; en celular el
+  scroll con inercia se salta el estado intermedio de una transición disparada
+  por JavaScript, así que ahí se usa una animación por keyframes, que sí corre
+  completa.
+*/
+@keyframes aparecer {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 1.5rem, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html.js [data-aparece] {
+    opacity: 0;
+    transform: translate3d(0, 1.5rem, 0);
+  }
+
+  html.js [data-aparece].visible {
+    opacity: 1;
+    transform: none;
+    transition:
+      opacity var(--duracion-larga) var(--ease-salida) var(--retraso, 0ms),
+      transform var(--duracion-larga) var(--ease-salida) var(--retraso, 0ms);
+  }
+
+  @media (max-width: 639px) {
+    html.js [data-aparece].visible {
+      transition: none;
+      animation: aparecer var(--duracion-larga) var(--ease-salida) var(--retraso, 0ms) both;
+    }
+  }
+
+  /* Entrada del hero al cargar, sin esperar a ningún observador. */
+  .entrada {
+    animation: aparecer var(--duracion-larga) var(--ease-salida) var(--retraso, 0ms) both;
+  }
+}
+
+/* Botones: el mismo radio de 8 px que todo lo demás. */
+@layer components {
+  .boton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.625rem;
+    min-height: 3rem;
+    padding-inline: 1.25rem;
+    border: 1px solid transparent;
+    border-radius: var(--radius-base);
+    font-family: var(--font-cuerpo);
+    font-size: var(--text-pequeno);
+    font-weight: 600;
+    line-height: 1;
+    white-space: nowrap;
+    text-decoration: none;
+    transition:
+      background-color var(--duracion-media) var(--ease-salida),
+      border-color var(--duracion-media) var(--ease-salida),
+      color var(--duracion-media) var(--ease-salida),
+      transform var(--duracion-corta) var(--ease-salida);
+  }
+
+  .boton:active {
+    transform: scale(0.97);
+  }
+
+  .boton-primario {
+    background-color: var(--acento);
+    color: var(--sobre-acento);
+  }
+
+  .boton-secundario {
+    border-color: var(--linea-fuerte);
+    color: var(--texto);
+  }
+
+  .boton-compacto {
+    min-height: 2.5rem;
+    padding-inline: 1rem;
+  }
+
+  .boton-icono {
+    width: 2.75rem;
+    min-height: 2.75rem;
+    padding-inline: 0;
+    color: var(--texto);
+  }
+
+  @media (hover: hover) {
+    .boton-primario:hover {
+      background-color: color-mix(in oklab, var(--acento) 86%, var(--texto));
+    }
+
+    .boton-secundario:hover {
+      border-color: var(--texto);
+    }
+
+    .boton-icono:hover {
+      border-color: var(--linea-fuerte);
+    }
+  }
+
+  .enlace {
+    text-decoration-line: underline;
+    text-decoration-color: var(--linea-fuerte);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.25em;
+    transition: text-decoration-color var(--duracion-media) var(--ease-salida);
+  }
+
+  @media (hover: hover) {
+    .enlace:hover {
+      text-decoration-color: var(--acento);
+    }
+  }
+}
+
+/* Navbar: al bajar, aparece el fondo y el contenido sube a su altura compacta. */
+.navbar-fondo {
+  opacity: 0;
+  transition: opacity var(--duracion-media) var(--ease-salida);
+}
+
+.navbar-contenido {
+  transform: translate3d(0, 0.5rem, 0);
+  transition: transform var(--duracion-media) var(--ease-salida);
+}
+
+[data-compacto="true"] .navbar-fondo {
+  opacity: 1;
+}
+
+[data-compacto="true"] .navbar-contenido {
+  transform: none;
+}
+
+/* Panel del menú de celular. La visibilidad cambia al final al cerrar, para que se vea la salida. */
+.panel-menu {
+  opacity: 0;
+  transform: translate3d(0, -0.5rem, 0);
+  visibility: hidden;
+  transition:
+    opacity var(--duracion-media) var(--ease-salida),
+    transform var(--duracion-media) var(--ease-salida),
+    visibility 0s linear var(--duracion-media);
+}
+
+.panel-menu[data-abierto="true"] {
+  opacity: 1;
+  transform: none;
+  visibility: visible;
+  transition-delay: 0s;
+}
+
+/* Las secciones y el main reciben el foco al saltar a ellos; el contorno sobra ahí. */
+[tabindex="-1"]:focus {
+  outline: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .navbar-fondo,
+  .navbar-contenido,
+  .panel-menu,
+  .boton {
+    transition: none;
+  }
+
+  .boton:active {
+    transform: none;
+  }
+}
