@@ -1,5 +1,6 @@
 ---
 import Boton from "@/componentes/Boton.astro";
+import Credencial from "@/componentes/Credencial.astro";
 import { perfil } from "@/datos/perfil";
 
 const [nombre, apellido] = perfil.nombre.split(" ");
@@ -15,39 +16,38 @@ const lineas = [nombre, apellido].map((palabra) => [...palabra].map((letra) => (
   </div>
 
   <div
-    class="mx-auto flex max-w-[1400px] flex-col px-margen pt-10 pb-20 md:pt-16 lg:min-h-[calc(100svh-4rem)] lg:justify-center lg:pb-24"
+    class="mx-auto grid max-w-[1400px] grid-cols-12 gap-x-6 gap-y-4 px-margen pt-10 pb-20 md:pt-16 lg:min-h-[calc(100svh-4rem)] lg:items-center lg:pt-0 lg:pb-16"
   >
-    <p class="entrada font-mono text-etiqueta text-texto-suave" style="--retraso: 60ms">{perfil.busqueda}</p>
+    <div class="col-span-12 lg:col-span-8">
+      <h1 id="titulo-inicio" class="text-nombre select-none" data-nombre>
+        <span class="sr-only">{perfil.nombre}</span>
+        <span aria-hidden="true" class="block">
+          {
+            lineas.map((linea) => (
+              <span class="block whitespace-nowrap">
+                {linea.map(({ letra, i }) => (
+                  <span class="letra" data-letra style={`--i: ${i}`}>
+                    {letra}
+                  </span>
+                ))}
+              </span>
+            ))
+          }
+        </span>
+      </h1>
 
-    <h1 id="titulo-inicio" class="mt-6 text-nombre select-none" data-nombre>
-      <span class="sr-only">{perfil.nombre}</span>
-      <span aria-hidden="true" class="block">
-        {
-          lineas.map((linea) => (
-            <span class="block whitespace-nowrap">
-              {linea.map(({ letra, i }) => (
-                <span class="letra" data-letra style={`--i: ${i}`}>
-                  {letra}
-                </span>
-              ))}
-            </span>
-          ))
-        }
-      </span>
-    </h1>
-
-    <div class="mt-10 grid gap-8 md:mt-14 md:grid-cols-12 md:items-end">
-      <p class="entrada max-w-[36ch] text-entrada text-texto-suave md:col-span-6" style="--retraso: 700ms">
-        {perfil.oficio} en {perfil.ciudad}. Hago interfaces rápidas y accesibles con Astro, React y TypeScript, y
-        backend con Java y Spring Boot.
+      <p class="entrada mt-6 font-display text-titulo-3 font-semibold text-texto-suave md:mt-8" style="--retraso: 700ms">
+        {perfil.rol}
       </p>
-      <div
-        class="entrada grid gap-3 sm:flex sm:flex-wrap md:col-span-6 md:justify-end"
-        style="--retraso: 820ms"
-      >
+
+      <div class="entrada mt-10 grid gap-3 sm:flex sm:flex-wrap" style="--retraso: 820ms">
         <Boton href="#proyectos" pieza="abajo" magnetico>Ver proyectos</Boton>
         <Boton href={`mailto:${perfil.correo}`} variante="secundario" magnetico>Escríbeme</Boton>
       </div>
+    </div>
+
+    <div class="col-span-12 mt-10 [--largo-cinta:4rem] lg:col-span-4 lg:self-start lg:[--largo-cinta:clamp(5rem,14vh,8rem)] xl:-mt-16 xl:[--largo-cinta:clamp(9rem,26vh,15rem)]">
+      <Credencial />
     </div>
   </div>
 </section>

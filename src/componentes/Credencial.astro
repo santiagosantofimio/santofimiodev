@@ -1,0 +1,74 @@
+---
+import { MapPinIcon } from "@phosphor-icons/react/ssr";
+import QRCode from "qrcode";
+import LogoMarca from "@/componentes/LogoMarca.astro";
+import { perfil } from "@/datos/perfil";
+import type { Logo } from "@/lib/logos";
+
+// El QR se arma al compilar y lleva a LinkedIn: sirve para escanearlo desde el celular.
+const qr = (
+  await QRCode.toString(perfil.linkedin, {
+    type: "svg",
+    margin: 0,
+    errorCorrectionLevel: "M",
+    color: { dark: "#000000", light: "#0000" },
+  })
+).replace(/stroke="#000000"/g, 'stroke="currentColor"');
+
+const stack: Logo[] = ["java", "spring", "react", "typescript", "angular"];
+const [nombre, apellido] = perfil.nombre.split(" ");
+---
+
+<div class="credencial-escena" data-credencial data-pausable>
+  <div class="credencial-balanceo">
+    <div class="credencial-pendulo" data-pendulo>
+      <div class="credencial-cinta" aria-hidden="true">
+        <span>santofimiodev santofimiodev santofimiodev santofimiodev santofimiodev</span>
+      </div>
+      <div class="credencial-broche" aria-hidden="true"></div>
+
+      <div
+        class="credencial-tarjeta"
+        data-tarjeta
+        role="img"
+        aria-label={`Credencial de ${perfil.nombre}, ${perfil.rol} en ${perfil.ciudad}, con un código QR que abre su LinkedIn.`}
+      >
+        <div class="credencial-ranura" aria-hidden="true"></div>
+
+        <div class="flex items-center justify-between font-mono text-[0.6875rem] text-tinta-suave">
+          <span>santofimiodev</span>
+          <span
+            class="inline-flex size-6 items-center justify-center rounded-[0.25rem] bg-tinta font-display text-[0.6875rem] font-extrabold text-papel"
+            >S.</span
+          >
+        </div>
+
+        <div class="credencial-foto mt-4" aria-hidden="true">
+          <span>S.</span>
+        </div>
+
+        <p class="mt-5 font-display text-[1.625rem] leading-[1.05] font-extrabold tracking-[-0.03em]">
+          {nombre}<br />{apellido}
+        </p>
+        <p class="mt-1.5 font-display text-[0.9375rem] font-semibold text-tinta-suave">{perfil.rol}</p>
+        <p class="mt-3 flex items-center gap-1.5 text-[0.8125rem] text-tinta-suave">
+          <MapPinIcon size={14} aria-hidden="true" />
+          {perfil.ciudad}, Colombia
+        </p>
+
+        <div class="mt-5 flex items-end justify-between gap-3 border-t border-[color-mix(in_oklab,var(--tinta)_14%,transparent)] pt-4">
+          <div>
+            <p class="font-mono text-[0.625rem] text-tinta-suave">Stack</p>
+            <div class="mt-2 flex items-center gap-2">
+              {stack.map((logo) => <LogoMarca logo={logo} tamano={20} />)}
+            </div>
+          </div>
+          <div class="flex flex-col items-end gap-1.5">
+            <div class="credencial-qr" set:html={qr} />
+            <p class="font-mono text-[0.625rem] text-tinta-suave">LinkedIn</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

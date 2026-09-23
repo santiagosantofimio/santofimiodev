@@ -68,7 +68,7 @@
   --text-titulo-1: clamp(2.75rem, 1.2rem + 5.2vw, 5.75rem);
   --text-titulo-1--line-height: 0.98;
   --text-titulo-1--letter-spacing: -0.045em;
-  --text-nombre: clamp(3.25rem, 0.5rem + 13vw, 13rem);
+  --text-nombre: clamp(3.25rem, 0.5rem + 10.5vw, 10.5rem);
   --text-nombre--line-height: 0.9;
   --text-nombre--letter-spacing: -0.05em;
 
@@ -489,6 +489,166 @@ html.cambiando-tema * {
     transform: none;
     font-weight: 800;
     filter: blur(0);
+  }
+}
+
+/* ---------- Hero: la credencial que cuelga ---------- */
+.credencial-escena {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.credencial-balanceo {
+  transform-origin: 50% 0;
+}
+
+.credencial-pendulo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transform-origin: 50% 0;
+  will-change: transform;
+}
+
+/* La cinta, con el nombre del sitio tejido a lo largo. */
+.credencial-cinta {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  width: 1.625rem;
+  height: var(--largo-cinta, 7rem);
+  overflow: hidden;
+  background:
+    linear-gradient(to right, color-mix(in oklab, black 25%, transparent), transparent 18%, transparent 82%, color-mix(in oklab, black 25%, transparent)),
+    var(--superficie-alta);
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.1em;
+  color: var(--texto-suave);
+  /* Arriba se desvanece: la cinta viene de más arriba, no empieza en el aire. */
+  -webkit-mask-image: linear-gradient(to bottom, transparent, black 45%);
+  mask-image: linear-gradient(to bottom, transparent, black 45%);
+}
+
+.credencial-cinta > span {
+  writing-mode: vertical-rl;
+  white-space: nowrap;
+  line-height: 1.625rem;
+  transform: translate3d(0, -0.5rem, 0);
+}
+
+.credencial-broche {
+  width: 2.5rem;
+  height: 1.125rem;
+  margin-top: -0.125rem;
+  border: 1px solid color-mix(in oklab, var(--linea-fuerte) 70%, white);
+  border-radius: 0.3125rem;
+  background: linear-gradient(to bottom, color-mix(in oklab, var(--linea-fuerte) 55%, white), var(--linea-fuerte));
+}
+
+.credencial-tarjeta {
+  position: relative;
+  width: min(17.5rem, 78vw);
+  margin-top: -0.375rem;
+  padding: 1.75rem 1.25rem 1.25rem;
+  border-radius: var(--radius-marco);
+  background: var(--papel);
+  color: var(--tinta);
+  box-shadow:
+    inset 0 1px 0 color-mix(in oklab, white 60%, transparent),
+    0 2rem 3rem -1.5rem color-mix(in oklab, black 60%, transparent),
+    0 0 0 1px color-mix(in oklab, var(--tinta) 10%, transparent);
+  cursor: grab;
+  touch-action: pan-y;
+  user-select: none;
+  transition: transform var(--duracion-ui) var(--ease-salida);
+}
+
+.credencial-tarjeta:active {
+  cursor: grabbing;
+}
+
+/* El brillo que sigue al puntero, como luz sobre plástico. */
+.credencial-tarjeta::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    16rem circle at var(--luz-x, 50%) var(--luz-y, 0%),
+    color-mix(in oklab, white 45%, transparent),
+    transparent 55%
+  );
+  opacity: 0;
+  mix-blend-mode: soft-light;
+  pointer-events: none;
+  transition: opacity var(--duracion-media) var(--ease-salida);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .credencial-tarjeta:hover::after {
+    opacity: 1;
+  }
+}
+
+.credencial-ranura {
+  position: absolute;
+  top: 0.625rem;
+  left: 50%;
+  width: 2.75rem;
+  height: 0.4375rem;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--tinta) 18%, var(--papel));
+  box-shadow: inset 0 1px 2px color-mix(in oklab, black 35%, transparent);
+  transform: translateX(-50%);
+}
+
+.credencial-foto {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--radius-base);
+  background:
+    repeating-linear-gradient(135deg, color-mix(in oklab, var(--tinta) 7%, transparent) 0 1px, transparent 1px 9px),
+    color-mix(in oklab, var(--tinta) 6%, var(--papel));
+  font-family: var(--font-display);
+  font-size: 4.5rem;
+  font-weight: 800;
+  letter-spacing: -0.05em;
+  color: color-mix(in oklab, var(--tinta) 22%, var(--papel));
+  text-shadow: 0 1px 0 color-mix(in oklab, white 70%, transparent);
+}
+
+.credencial-qr {
+  width: 4.25rem;
+  height: 4.25rem;
+  color: var(--tinta);
+}
+
+.credencial-qr svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+@keyframes vaiven {
+  from {
+    rotate: -1.2deg;
+  }
+  to {
+    rotate: 1.2deg;
+  }
+}
+
+@keyframes colgar {
+  from {
+    opacity: 0;
+    translate: 0 -2.5rem;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
   }
 }
 
@@ -1042,6 +1202,18 @@ html:not(.js) .paso::after {
 @media (prefers-reduced-motion: no-preference) {
   .letra {
     animation: letra-entra 760ms var(--ease-salida) calc(120ms + var(--i, 0) * 35ms) backwards;
+  }
+
+  .credencial-escena {
+    animation: colgar 900ms var(--ease-salida) 200ms both;
+  }
+
+  .credencial-balanceo {
+    animation: vaiven 4.8s ease-in-out infinite alternate;
+  }
+
+  .credencial-escena.moviendo .credencial-balanceo {
+    animation-play-state: paused;
   }
 
   html.js [data-aparece].visible .tecnologia {

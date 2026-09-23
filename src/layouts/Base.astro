@@ -20,7 +20,7 @@ const persona = {
   "@context": "https://schema.org",
   "@type": "Person",
   name: perfil.nombre,
-  jobTitle: perfil.oficio,
+  jobTitle: perfil.rol,
   url: perfil.sitio,
   email: `mailto:${perfil.correo}`,
   address: { "@type": "PostalAddress", addressLocality: perfil.ciudad, addressCountry: "CO" },
@@ -91,6 +91,7 @@ const persona = {
       import { iniciarCarpeta } from "@/lib/carpeta";
       import { iniciarContrasteVivo } from "@/lib/contraste-vivo";
       import { iniciarCopiar } from "@/lib/copiar";
+      import { iniciarCredencial } from "@/lib/credencial";
       import { iniciarDesplazamiento } from "@/lib/desplazamiento";
       import { iniciarLuz } from "@/lib/luz";
       import { iniciarMagnetico } from "@/lib/magnetico";
@@ -108,6 +109,7 @@ const persona = {
       iniciarContrasteVivo();
       iniciarCopiar();
       iniciarCarpeta();
+      iniciarCredencial();
     </script>
   </body>
 </html>
