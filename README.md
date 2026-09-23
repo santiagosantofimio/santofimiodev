@@ -81,6 +81,9 @@ cuatro duraciones.
 
 - El nombre del inicio entra letra por letra y después cambia de grosor según la cercanía del
   mouse. En pantallas táctiles, un toque manda una onda.
+- Al lado del nombre cuelga una credencial de una cinta. Se puede agarrar y soltar (con mouse o
+  con el dedo) y vuelve al centro oscilando como un péndulo; con el mouse encima se inclina y le
+  cae un brillo. Su código QR, que abre LinkedIn, se genera al compilar con `qrcode`.
 - "Sobre mí" vive en una carpeta: con mouse se abre al pasar por encima; con clic, toque o
   teclado queda abierta. El frente gira hacia quien mira y deja ver la hoja.
 - La navbar se vuelve una barra flotante al bajar, con una línea que marca cuánto se ha leído.
