@@ -1,0 +1,14 @@
+---
+import { logos, type Logo } from "@/lib/logos";
+
+interface Props {
+  logo: Logo;
+  class?: string;
+}
+
+const { logo, class: clase } = Astro.props;
+---
+
+<svg class:list={["logo", clase]} viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+  <path d={logos[logo].path}></path>
+</svg>

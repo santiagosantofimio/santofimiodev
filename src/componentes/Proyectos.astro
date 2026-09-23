@@ -1,5 +1,6 @@
 ---
-import { ArrowUpRightIcon } from "@phosphor-icons/react/ssr";
+import { ArrowUpRightIcon, ChartBarIcon } from "@phosphor-icons/react/ssr";
+import LogoMarca from "@/componentes/LogoMarca.astro";
 import { perfil } from "@/datos/perfil";
 import { proyectos } from "@/datos/proyectos";
 ---
@@ -8,7 +9,12 @@ import { proyectos } from "@/datos/proyectos";
   <div class="mx-auto grid max-w-[1400px] grid-cols-12 gap-x-6 gap-y-8 px-margen">
     <div class="col-span-12 lg:col-span-4" data-aparece>
       <h2 id="titulo-proyectos" class="text-titulo-3 font-bold">Otros proyectos</h2>
-      <a href={perfil.github} target="_blank" rel="noopener" class="enlace mt-2 inline-flex min-h-11 items-center text-pequeno text-texto-suave">
+      <a
+        href={perfil.github}
+        target="_blank"
+        rel="noopener"
+        class="enlace mt-2 inline-flex min-h-11 items-center text-pequeno text-texto-suave"
+      >
         Ver mi perfil de GitHub
       </a>
     </div>
@@ -16,28 +22,30 @@ import { proyectos } from "@/datos/proyectos";
     <ul class="col-span-12 lg:col-span-8">
       {
         proyectos.map((proyecto) => (
-          <li data-aparece class="grid gap-x-8 gap-y-3 border-t border-linea pt-6 md:grid-cols-8">
-            <h3 class="font-display text-entrada font-bold md:col-span-3">
-              <a
-                href={proyecto.repositorio}
-                target="_blank"
-                rel="noopener"
-                class="inline-flex items-center gap-2"
-              >
-                {proyecto.nombre}
-                <ArrowUpRightIcon
-                  size={18}
-                  weight="bold"
-                  aria-hidden="true"
-                  className="flecha text-acento"
-                />
-                <span class="sr-only">(repositorio en GitHub)</span>
-              </a>
-            </h3>
-            <div class="md:col-span-5">
-              <p class="max-w-[56ch] text-texto-suave">{proyecto.descripcion}</p>
-              <p class="mt-3 font-mono text-etiqueta text-texto-suave">{proyecto.tecnologias.join(", ")}</p>
-            </div>
+          <li data-aparece>
+            <article data-luz class="tarjeta grid gap-6 p-6 md:grid-cols-[3rem_1fr] md:p-8">
+              <span class="icono-tarjeta">
+                <ChartBarIcon size={24} weight="bold" aria-hidden="true" />
+              </span>
+              <div>
+                <h3 class="font-display text-titulo-3 font-bold">
+                  <a href={proyecto.repositorio} target="_blank" rel="noopener" class="inline-flex items-center gap-2">
+                    {proyecto.nombre}
+                    <ArrowUpRightIcon size={20} weight="bold" aria-hidden="true" className="flecha text-texto-suave" />
+                    <span class="sr-only">(repositorio en GitHub)</span>
+                  </a>
+                </h3>
+                <p class="mt-3 max-w-[60ch] text-texto-suave">{proyecto.descripcion}</p>
+                <ul class="mt-5 flex flex-wrap gap-2">
+                  {proyecto.tecnologias.map(({ nombre, logo }) => (
+                    <li class="etiqueta gap-2">
+                      <LogoMarca logo={logo} class="text-[0.95rem]" />
+                      {nombre}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </article>
           </li>
         ))
       }

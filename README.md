@@ -61,21 +61,29 @@ Si cambia la dirección del sitio, hay que actualizarla en tres lugares: `site` 
 
 Los tokens están en `src/estilos/global.css`.
 
-**Color.** Oscuro por defecto: tinta cálida casi negra (`#15120f`) con texto crema (`#f1e9da`). El
-modo claro se activa con `data-tema="claro"` en `<html>` y se guarda en el navegador. Hay un solo
-acento, un rojo señal: `#ff5a36` en oscuro y `#bb2c13` en claro, porque el mismo tono no pasa el
-contraste en los dos fondos. La paleta por defecto de Tailwind está borrada, así que solo existen
-los colores del sitio (`fondo`, `superficie`, `texto`, `texto-suave`, `linea`, `linea-fuerte`,
-`acento`, `sobre-acento`). Antes de cambiar un color, correr `npm run contraste`: revisa nueve
-combinaciones por modo y falla si alguna no llega a AA.
+**Color.** Todo el sitio es gris, sin un color de acento aparte. En oscuro, que es el modo por
+defecto, el fondo es grafito (`#111214`) con texto casi blanco (`#ececee`), y el botón principal va
+en gris plata (`#d9dade`). En claro se invierte: fondo gris claro (`#e9eaec`) y botón grafito
+(`#26272b`). El modo claro se activa con `data-tema="claro"` en `<html>` y queda guardado en el
+navegador. La paleta por defecto de Tailwind está borrada, así que solo existen los colores del
+sitio (`fondo`, `superficie`, `superficie-alta`, `texto`, `texto-suave`, `linea`, `linea-fuerte`,
+`acento`, `sobre-acento`). Antes de cambiar un color, correr `npm run contraste`: revisa todas las
+combinaciones de los dos modos y falla si alguna no llega a AA.
 
 **Esquinas.** Un solo radio para todo: 8 px (`rounded-base`). Botones, opciones del estimador,
 etiquetas, paneles y el anillo de foco. No hay píldoras ni círculos, y los demás radios de
-Tailwind también están borrados para que no se cuelen.
+Tailwind también están borrados para que no se cuelen. La única excepción son los detalles a escala
+dentro de la pantalla dibujada del inicio.
 
 **Tipografía.** Schibsted Grotesk para títulos, Geist para el texto y JetBrains Mono solo para
 etiquetas técnicas. Las tres se sirven desde el propio sitio con Fontsource.
 
-**Movimiento.** Una sola curva de salida (`ease-salida`) y cuatro duraciones. Las secciones
-aparecen al entrar en pantalla y los enlaces internos se desplazan con una animación propia. Si
-el sistema pide menos movimiento, todo eso se apaga.
+**Logos.** Los de las tecnologías salen de Simple Icons y se dibujan en un solo tono, el del
+texto, nunca con el color de cada marca. Se agregan en `src/lib/logos.ts`.
+
+**Movimiento.** Una sola curva de salida (`ease-salida`) y cuatro duraciones. El titular del inicio
+entra palabra por palabra y la pantalla de al lado se arma sola y va señalando qué lleva la página
+de un negocio. Las secciones aparecen al entrar en pantalla, los pasos de "Cómo trabajo" se
+encienden en orden, los logos del stack pasan en una cinta y las tarjetas tienen un brillo que
+sigue al mouse. Lo que se repite solo corre mientras está a la vista. Si el sistema pide menos
+movimiento, todo eso se apaga y queda el estado final.
