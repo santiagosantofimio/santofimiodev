@@ -30,6 +30,8 @@ export default function AlternarTema() {
     } else {
       delete html.dataset.tema;
     }
+    const fondo = getComputedStyle(html).getPropertyValue("--fondo").trim();
+    document.querySelector('meta[name="theme-color"]')?.setAttribute("content", fondo);
     try {
       localStorage.setItem("tema", siguiente);
     } catch {

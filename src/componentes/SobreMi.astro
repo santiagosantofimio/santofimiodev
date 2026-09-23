@@ -1,0 +1,21 @@
+---
+import { perfil } from "@/datos/perfil";
+---
+
+<section aria-labelledby="titulo-sobre-mi" class="py-seccion">
+  <div class="mx-auto grid max-w-[1400px] grid-cols-12 gap-x-6 px-margen">
+    <div class="col-span-12 md:col-span-8 md:col-start-3 lg:col-span-6 lg:col-start-4" data-aparece>
+      <h2 id="titulo-sobre-mi" class="text-titulo-3 font-bold">Sobre mí</h2>
+      <div class="mt-6 flex flex-col gap-5 text-entrada">
+        <p>
+          Vivo en {perfil.ciudad} y hago páginas web para negocios pequeños, de esos que atienden por WhatsApp
+          y necesitan que la gente los encuentre desde el celular.
+        </p>
+        <p class="text-texto-suave">
+          La persona que te contesta es la misma que construye tu página. Me gusta trabajar con negocios que
+          tienen buen producto y todavía no tienen dónde mostrarlo en internet.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>

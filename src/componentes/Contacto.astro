@@ -1,0 +1,27 @@
+---
+import Boton from "@/componentes/Boton.astro";
+import { perfil } from "@/datos/perfil";
+import { enlaceWhatsApp, TEXTO_CTA_WHATSAPP } from "@/lib/whatsapp";
+---
+
+<section
+  id="contacto"
+  tabindex="-1"
+  aria-labelledby="titulo-contacto"
+  class="scroll-mt-16 border-t border-linea py-seccion"
+>
+  <div class="mx-auto grid max-w-[1400px] grid-cols-12 gap-x-6 gap-y-10 px-margen">
+    <h2 id="titulo-contacto" class="col-span-12 text-titulo-1 font-extrabold lg:col-span-9" data-aparece>
+      Cuéntame de tu negocio<span class="text-acento">.</span>
+    </h2>
+    <div class="col-span-12 flex flex-col gap-6 md:col-span-7 md:col-start-6 lg:col-span-5 lg:col-start-7" data-aparece>
+      <p class="text-entrada text-texto-suave">
+        {perfil.respuesta} Si prefieres el correo, escríbeme a{" "}
+        <a href={`mailto:${perfil.correo}`} class="enlace text-texto">{perfil.correo}</a>.
+      </p>
+      <div>
+        <Boton href={enlaceWhatsApp("cierre")} icono="whatsapp" class="w-full sm:w-auto">{TEXTO_CTA_WHATSAPP}</Boton>
+      </div>
+    </div>
+  </div>
+</section>

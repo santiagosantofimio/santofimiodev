@@ -20,6 +20,8 @@ export interface Opcion {
 export interface Pregunta {
   id: "tipo-sitio" | "negocio" | "contenido" | "dominio";
   pregunta: string;
+  /** Cómo se nombra la respuesta en el mensaje de WhatsApp. */
+  resumen: string;
   opciones: Opcion[];
 }
 
@@ -27,6 +29,7 @@ export const preguntas: Pregunta[] = [
   {
     id: "tipo-sitio",
     pregunta: "¿Qué necesitas?",
+    resumen: "Necesito",
     opciones: [
       {
         id: "una-pagina",
@@ -38,19 +41,20 @@ export const preguntas: Pregunta[] = [
         id: "varias-secciones",
         etiqueta: "Un sitio con varias secciones",
         precio: { desde: 1_200_000, hasta: 2_200_000 },
-        semanas: { desde: 2, hasta: 4 },
+        semanas: { desde: 1, hasta: 2 },
       },
       {
         id: "rediseno",
         etiqueta: "Rediseñar el sitio que ya tengo",
         precio: { desde: 1_200_000, hasta: 2_200_000 },
-        semanas: { desde: 2, hasta: 4 },
+        semanas: { desde: 1, hasta: 2 },
       },
     ],
   },
   {
     id: "negocio",
     pregunta: "¿Qué tipo de negocio tienes?",
+    resumen: "Negocio",
     opciones: [
       { id: "belleza", etiqueta: "Peluquería, barbería o spa" },
       { id: "comida", etiqueta: "Restaurante, cafetería o panadería" },
@@ -63,6 +67,7 @@ export const preguntas: Pregunta[] = [
   {
     id: "contenido",
     pregunta: "¿Tienes fotos y textos listos?",
+    resumen: "Fotos y textos",
     opciones: [
       { id: "listo", etiqueta: "Sí, tengo todo" },
       { id: "algo", etiqueta: "Tengo una parte" },
@@ -77,6 +82,7 @@ export const preguntas: Pregunta[] = [
   {
     id: "dominio",
     pregunta: "¿Ya tienes dominio?",
+    resumen: "Dominio",
     opciones: [
       { id: "si", etiqueta: "Sí, ya tengo" },
       {

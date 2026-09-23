@@ -5,10 +5,12 @@ export interface Perfil {
   /** Solo dígitos, con indicativo de país. Es lo que usa el enlace de wa.me. */
   whatsapp: string;
   whatsappVisible: string;
+  correo: string;
   github: string;
-  /** Opcionales: si no están, el sitio no los muestra. */
-  correo?: string;
-  linkedin?: string;
+  linkedin: string;
+  /** Tiempo de respuesta comprometido, tal como se dice en el sitio. */
+  respuesta: string;
+  sitio: string;
 }
 
 export const perfil: Perfil = {
@@ -17,5 +19,9 @@ export const perfil: Perfil = {
   ciudad: "Bogotá",
   whatsapp: "573102794632",
   whatsappVisible: "+57 310 279 4632",
+  correo: "santofimiodeveloper@gmail.com",
   github: "https://github.com/santiagosantofimio",
+  linkedin: "https://www.linkedin.com/in/santiagosantofimio/",
+  respuesta: "Respondo en una a tres horas.",
+  sitio: "https://santofimiodev.pages.dev",
 };

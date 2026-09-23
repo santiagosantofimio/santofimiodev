@@ -67,7 +67,8 @@
   /* Movimiento: una curva de salida propia y tres duraciones. */
   --ease-salida: cubic-bezier(0.2, 0.85, 0.25, 1);
   --duracion-corta: 160ms;
-  --duracion-media: 360ms;
+  --duracion-ui: 220ms;
+  --duracion-media: 300ms;
   --duracion-larga: 720ms;
 }
 
@@ -144,7 +145,7 @@ html.cambiando-tema * {
 @keyframes aparecer {
   from {
     opacity: 0;
-    transform: translate3d(0, 1.5rem, 0);
+    transform: translate3d(0, 1rem, 0);
   }
   to {
     opacity: 1;
@@ -155,7 +156,7 @@ html.cambiando-tema * {
 @media (prefers-reduced-motion: no-preference) {
   html.js [data-aparece] {
     opacity: 0;
-    transform: translate3d(0, 1.5rem, 0);
+    transform: translate3d(0, 1rem, 0);
   }
 
   html.js [data-aparece].visible {
@@ -283,16 +284,106 @@ html.cambiando-tema * {
   transform: translate3d(0, -0.5rem, 0);
   visibility: hidden;
   transition:
-    opacity var(--duracion-media) var(--ease-salida),
-    transform var(--duracion-media) var(--ease-salida),
-    visibility 0s linear var(--duracion-media);
+    opacity var(--duracion-corta) var(--ease-salida),
+    transform var(--duracion-corta) var(--ease-salida),
+    visibility 0s linear var(--duracion-corta);
 }
 
+/* Abre un poco más lento de lo que cierra: la salida no debe hacer esperar. */
 .panel-menu[data-abierto="true"] {
   opacity: 1;
   transform: none;
   visibility: visible;
+  transition-duration: var(--duracion-ui), var(--duracion-ui), 0s;
   transition-delay: 0s;
+}
+
+/* Opciones del estimador: radios nativos, vestidos de botón grande. */
+.opcion {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  min-height: 3.5rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--linea-fuerte);
+  border-radius: var(--radius-base);
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    border-color var(--duracion-ui) var(--ease-salida),
+    background-color var(--duracion-ui) var(--ease-salida),
+    transform var(--duracion-corta) var(--ease-salida);
+}
+
+.opcion:active {
+  transform: scale(0.98);
+}
+
+.opcion:has(:checked) {
+  border-color: var(--acento);
+  background-color: var(--superficie);
+}
+
+.opcion:has(:focus-visible) {
+  outline: 2px solid var(--acento);
+  outline-offset: 3px;
+}
+
+.opcion-marca {
+  flex-shrink: 0;
+  color: var(--acento);
+  opacity: 0;
+  transform: scale(0.8);
+  transition:
+    opacity var(--duracion-ui) var(--ease-salida),
+    transform var(--duracion-ui) var(--ease-salida);
+}
+
+.opcion:has(:checked) .opcion-marca {
+  opacity: 1;
+  transform: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .opcion:hover {
+    border-color: var(--texto);
+  }
+
+  .opcion:has(:checked):hover {
+    border-color: var(--acento);
+  }
+}
+
+/* Barra del estimado en celular: entra desde abajo la primera vez que aparece. */
+.barra-estimado {
+  transition:
+    opacity var(--duracion-ui) var(--ease-salida),
+    transform var(--duracion-ui) var(--ease-salida);
+
+  @starting-style {
+    opacity: 0;
+    transform: translate3d(0, 100%, 0);
+  }
+}
+
+/* Etiquetas del stack. Las de "aprendiendo" van con borde punteado, sin pedir disculpas. */
+.etiqueta {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.25rem;
+  padding: 0.375rem 0.75rem;
+  border: 1px solid var(--linea-fuerte);
+  border-radius: var(--radius-base);
+  font-family: var(--font-mono);
+  font-size: var(--text-etiqueta);
+  line-height: 1.3;
+}
+
+.etiqueta-aprendiendo {
+  border-style: dashed;
+  color: var(--texto-suave);
 }
 
 /* Las secciones y el main reciben el foco al saltar a ellos; el contorno sobra ahí. */
@@ -304,11 +395,36 @@ html.cambiando-tema * {
   .navbar-fondo,
   .navbar-contenido,
   .panel-menu,
-  .boton {
+  .boton,
+  .barra-estimado {
     transition: none;
   }
 
-  .boton:active {
+  .opcion,
+  .opcion-marca {
+    transition-property: border-color, background-color, opacity;
+  }
+
+  .boton:active,
+  .opcion:active,
+  .opcion-marca {
     transform: none;
+  }
+}
+
+/* Flecha de enlace externo: se corre hacia donde apunta al pasar el mouse. */
+.flecha {
+  transition: transform var(--duracion-ui) var(--ease-salida);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  a:hover > .flecha {
+    transform: translate3d(2px, -2px, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flecha {
+    transition: none;
   }
 }

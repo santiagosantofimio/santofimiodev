@@ -1,0 +1,40 @@
+---
+import { perfil } from "@/datos/perfil";
+import { enlaceWhatsApp } from "@/lib/whatsapp";
+
+const anio = new Date().getFullYear();
+
+const enlaces = [
+  { texto: `WhatsApp ${perfil.whatsappVisible}`, href: enlaceWhatsApp("general") },
+  { texto: perfil.correo, href: `mailto:${perfil.correo}` },
+  { texto: "GitHub", href: perfil.github },
+  { texto: "LinkedIn", href: perfil.linkedin },
+];
+---
+
+<footer class="border-t border-linea">
+  <div
+    class="mx-auto flex max-w-[1400px] flex-col gap-8 px-margen pt-10 pb-[calc(2.5rem+env(safe-area-inset-bottom))] md:flex-row md:items-end md:justify-between"
+  >
+    <div>
+      <p class="font-display font-bold">{perfil.nombre}</p>
+      <p class="mt-1 text-pequeno text-texto-suave">{perfil.oficio} en {perfil.ciudad}. © {anio}</p>
+    </div>
+    <ul class="flex flex-col text-pequeno md:flex-row md:flex-wrap md:gap-x-6">
+      {
+        enlaces.map((enlace) => (
+          <li>
+            <a
+              href={enlace.href}
+              target={enlace.href.startsWith("http") ? "_blank" : undefined}
+              rel={enlace.href.startsWith("http") ? "noopener" : undefined}
+              class="enlace inline-flex min-h-11 items-center text-texto-suave"
+            >
+              {enlace.texto}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</footer>
