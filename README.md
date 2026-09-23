@@ -68,7 +68,8 @@ dos modos y falla si alguna no llega a AA.
 
 **Esquinas.** 8 px (`rounded-base`) para botones, etiquetas, campos y el anillo de foco. Las
 tarjetas son dobles: un marco de 12 px (`rounded-marco`) con un núcleo de 8 px adentro, separados
-por 4 px, para que las curvas sean concéntricas. No hay píldoras ni círculos.
+por 4 px, para que las curvas sean concéntricas. No hay píldoras. La única forma redonda son los
+iconos de "Cómo trabajo", que van en círculos para distinguir los pasos de las tarjetas.
 
 **Tipografía.** Schibsted Grotesk para títulos, Geist para el texto y JetBrains Mono para
 etiquetas y datos técnicos. Las tres se sirven desde el propio sitio con Fontsource. Schibsted es
@@ -80,6 +81,8 @@ cuatro duraciones.
 
 - El nombre del inicio entra letra por letra y después cambia de grosor según la cercanía del
   mouse. En pantallas táctiles, un toque manda una onda.
+- "Sobre mí" vive en una carpeta: con mouse se abre al pasar por encima; con clic, toque o
+  teclado queda abierta. El frente gira hacia quien mira y deja ver la hoja.
 - La navbar se vuelve una barra flotante al bajar, con una línea que marca cuánto se ha leído.
 - El cambio de tema se revela en un círculo que crece desde el botón (View Transitions).
 - Las secciones aparecen al entrar en pantalla, las tecnologías entran en cascada, los principios
