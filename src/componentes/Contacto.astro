@@ -1,7 +1,15 @@
 ---
+import { ArrowUpRightIcon, CheckIcon, CopyIcon } from "@phosphor-icons/react/ssr";
 import Boton from "@/componentes/Boton.astro";
 import { perfil } from "@/datos/perfil";
-import { enlaceWhatsApp, TEXTO_CTA_WHATSAPP } from "@/lib/whatsapp";
+import { enlaceWhatsApp } from "@/lib/whatsapp";
+
+const filas = [
+  { etiqueta: "Correo", valor: perfil.correo, href: `mailto:${perfil.correo}` },
+  { etiqueta: "LinkedIn", valor: "santiagosantofimio", href: perfil.linkedin },
+  { etiqueta: "GitHub", valor: "santiagosantofimio", href: perfil.github },
+  { etiqueta: "WhatsApp", valor: perfil.whatsappVisible, href: enlaceWhatsApp() },
+];
 ---
 
 <section
@@ -10,18 +18,49 @@ import { enlaceWhatsApp, TEXTO_CTA_WHATSAPP } from "@/lib/whatsapp";
   aria-labelledby="titulo-contacto"
   class="scroll-mt-16 border-t border-linea py-seccion"
 >
-  <div class="mx-auto grid max-w-[1400px] grid-cols-12 gap-x-6 gap-y-10 px-margen">
-    <h2 id="titulo-contacto" class="col-span-12 text-titulo-1 font-extrabold lg:col-span-9" data-aparece>
-      Cuéntame de tu negocio<span class="text-acento">.</span>
-    </h2>
-    <div class="col-span-12 flex flex-col gap-6 md:col-span-7 md:col-start-6 lg:col-span-5 lg:col-start-7" data-aparece>
-      <p class="text-entrada text-texto-suave">
-        {perfil.respuesta} Si prefieres el correo, escríbeme a{" "}
-        <a href={`mailto:${perfil.correo}`} class="enlace text-texto">{perfil.correo}</a>.
+  <div class="mx-auto grid max-w-[1400px] grid-cols-12 gap-x-6 gap-y-14 px-margen">
+    <div class="col-span-12 lg:col-span-6">
+      <h2 id="titulo-contacto" class="text-titulo-1 font-extrabold" data-aparece>Hablemos.</h2>
+      <p class="mt-8 max-w-[38ch] text-entrada text-texto-suave" data-aparece style="--retraso: 80ms">
+        Si tienes un puesto o un proyecto en el que pueda aportar, escríbeme. {perfil.respuesta}
       </p>
-      <div>
-        <Boton href={enlaceWhatsApp("cierre")} icono="whatsapp" class="w-full sm:w-auto">{TEXTO_CTA_WHATSAPP}</Boton>
+      <div class="mt-10 grid gap-3 sm:flex sm:flex-wrap" data-aparece style="--retraso: 160ms">
+        <Boton href={`mailto:${perfil.correo}`} pieza="diagonal" magnetico>Escríbeme</Boton>
+        <button type="button" class="boton boton-secundario" data-copiar={perfil.correo} data-magnetico>
+          <span class="copiar-texto">
+            <span class="copiar-normal inline-flex items-center gap-2">
+              <CopyIcon size={18} aria-hidden="true" />
+              Copiar correo
+            </span>
+            <span class="copiar-listo inline-flex items-center gap-2" aria-hidden="true">
+              <CheckIcon size={18} aria-hidden="true" />
+              Copiado
+            </span>
+          </span>
+        </button>
+        <span class="sr-only" aria-live="polite" data-copiar-aviso></span>
       </div>
     </div>
+
+    <ul class="col-span-12 border-t border-linea lg:col-span-5 lg:col-start-8 lg:self-end">
+      {
+        filas.map((fila, indice) => (
+          <li data-aparece style={`--retraso: ${indice * 70}ms`}>
+            <a
+              href={fila.href}
+              target={fila.href.startsWith("http") ? "_blank" : undefined}
+              rel={fila.href.startsWith("http") ? "noopener" : undefined}
+              class="fila-contacto"
+            >
+              <span class="flex min-w-0 flex-col py-3">
+                <span class="font-mono text-etiqueta font-normal tracking-normal text-texto-suave">{fila.etiqueta}</span>
+                <span class="[overflow-wrap:anywhere]">{fila.valor}</span>
+              </span>
+              <ArrowUpRightIcon size={24} aria-hidden="true" className="flecha shrink-0" />
+            </a>
+          </li>
+        ))
+      }
+    </ul>
   </div>
 </section>

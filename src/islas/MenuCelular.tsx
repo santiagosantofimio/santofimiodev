@@ -1,5 +1,4 @@
-import { useEffect, useId, useRef, useState } from "react";
-import { ListIcon, WhatsappLogoIcon, XIcon } from "@phosphor-icons/react";
+import { useEffect, useId, useRef, useState, type CSSProperties } from "react";
 
 interface Enlace {
   href: string;
@@ -8,18 +7,27 @@ interface Enlace {
 
 interface Props {
   enlaces: Enlace[];
-  whatsapp: string;
-  textoWhatsapp: string;
+  correo: string;
+  textoCorreo: string;
 }
 
-export default function MenuCelular({ enlaces, whatsapp, textoWhatsapp }: Props) {
+export default function MenuCelular({ enlaces, correo, textoCorreo }: Props) {
   const [abierto, setAbierto] = useState(false);
   const idPanel = useId();
   const boton = useRef<HTMLButtonElement>(null);
   const panel = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    const html = document.documentElement;
+    const fondo = [document.querySelector("main"), document.querySelector("footer")];
+    // Con el menú abierto, la página de atrás no se desplaza ni recibe el foco.
+    html.classList.toggle("menu-abierto", abierto);
+    fondo.forEach((elemento) => {
+      if (elemento) elemento.inert = abierto;
+    });
     if (!abierto) return;
+
+    panel.current?.querySelector<HTMLAnchorElement>("a")?.focus({ preventScroll: true });
 
     function alTeclear(evento: KeyboardEvent) {
       if (evento.key === "Escape") {
@@ -28,21 +36,13 @@ export default function MenuCelular({ enlaces, whatsapp, textoWhatsapp }: Props)
       }
     }
 
-    function alTocarFuera(evento: PointerEvent) {
-      const objetivo = evento.target as Node;
-      if (!panel.current?.contains(objetivo) && !boton.current?.contains(objetivo)) setAbierto(false);
-    }
-
-    // Si la pantalla crece hasta mostrar la navegación completa, el menú sobra.
     const escritorio = window.matchMedia("(min-width: 1024px)");
     const alCrecer = () => escritorio.matches && setAbierto(false);
 
     document.addEventListener("keydown", alTeclear);
-    document.addEventListener("pointerdown", alTocarFuera);
     escritorio.addEventListener("change", alCrecer);
     return () => {
       document.removeEventListener("keydown", alTeclear);
-      document.removeEventListener("pointerdown", alTocarFuera);
       escritorio.removeEventListener("change", alCrecer);
     };
   }, [abierto]);
@@ -52,13 +52,15 @@ export default function MenuCelular({ enlaces, whatsapp, textoWhatsapp }: Props)
       <button
         ref={boton}
         type="button"
-        className="boton boton-icono"
+        className="boton boton-icono hamburguesa"
+        data-abierto={abierto}
         aria-expanded={abierto}
         aria-controls={idPanel}
         aria-label={abierto ? "Cerrar menú" : "Abrir menú"}
         onClick={() => setAbierto((valor) => !valor)}
       >
-        {abierto ? <XIcon size={22} weight="bold" aria-hidden /> : <ListIcon size={22} weight="bold" aria-hidden />}
+        <span aria-hidden className="hamburguesa-linea" />
+        <span aria-hidden className="hamburguesa-linea" />
       </button>
 
       <div
@@ -66,16 +68,16 @@ export default function MenuCelular({ enlaces, whatsapp, textoWhatsapp }: Props)
         id={idPanel}
         data-abierto={abierto}
         inert={!abierto}
-        className="panel-menu absolute inset-x-0 top-full border-b border-linea bg-fondo px-margen pt-4 pb-8"
+        className="panel-menu fixed inset-x-0 top-16 bottom-0 flex flex-col justify-between bg-fondo px-margen pt-8 pb-[calc(2rem+env(safe-area-inset-bottom))]"
       >
         <nav aria-label="Menú">
           <ul className="flex flex-col">
-            {enlaces.map((enlace) => (
-              <li key={enlace.href}>
+            {enlaces.map((enlace, indice) => (
+              <li key={enlace.href} className="menu-item" style={{ "--i": indice } as CSSProperties}>
                 <a
                   href={enlace.href}
                   onClick={() => setAbierto(false)}
-                  className="block py-3 font-display text-titulo-3 font-semibold"
+                  className="block border-b border-linea py-4 font-display text-titulo-2 font-extrabold"
                 >
                   {enlace.texto}
                 </a>
@@ -84,14 +86,12 @@ export default function MenuCelular({ enlaces, whatsapp, textoWhatsapp }: Props)
           </ul>
         </nav>
         <a
-          href={whatsapp}
-          target="_blank"
-          rel="noopener"
+          href={`mailto:${correo}`}
           onClick={() => setAbierto(false)}
-          className="boton boton-primario mt-6 w-full"
+          className="menu-item boton boton-primario w-full"
+          style={{ "--i": enlaces.length } as CSSProperties}
         >
-          <WhatsappLogoIcon size={20} weight="bold" aria-hidden />
-          {textoWhatsapp}
+          {textoCorreo}
         </a>
       </div>
     </>

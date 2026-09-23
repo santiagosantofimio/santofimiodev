@@ -1,25 +1,34 @@
 ---
-import { ArrowDownIcon, WhatsappLogoIcon } from "@phosphor-icons/react/ssr";
+import { ArrowDownIcon, ArrowUpRightIcon, WhatsappLogoIcon } from "@phosphor-icons/react/ssr";
 
 interface Props {
   href: string;
   variante?: "primario" | "secundario";
-  icono?: "whatsapp" | "abajo";
+  /** Icono en su propia pieza, pegada al borde derecho del botón. */
+  pieza?: "abajo" | "diagonal" | "whatsapp";
   compacto?: boolean;
+  magnetico?: boolean;
   class?: string;
 }
 
-const { href, variante = "primario", icono, compacto = false, class: clase } = Astro.props;
+const { href, variante = "primario", pieza, compacto = false, magnetico = false, class: clase } = Astro.props;
 const externo = href.startsWith("http");
+const Icono = pieza === "abajo" ? ArrowDownIcon : pieza === "whatsapp" ? WhatsappLogoIcon : ArrowUpRightIcon;
 ---
 
 <a
   href={href}
-  class:list={["boton", `boton-${variante}`, compacto && "boton-compacto", clase]}
+  class:list={["boton", `boton-${variante}`, compacto && "boton-compacto", pieza && "boton-con-pieza", clase]}
   target={externo ? "_blank" : undefined}
   rel={externo ? "noopener" : undefined}
+  data-magnetico={magnetico ? "" : undefined}
 >
-  {icono === "whatsapp" && <WhatsappLogoIcon size={20} weight="bold" aria-hidden="true" />}
   <slot />
-  {icono === "abajo" && <ArrowDownIcon size={18} weight="bold" aria-hidden="true" />}
+  {
+    pieza && (
+      <span class="boton-pieza" aria-hidden="true">
+        <Icono size={18} className={pieza === "abajo" ? "pieza-abajo" : "pieza-diagonal"} />
+      </span>
+    )
+  }
 </a>

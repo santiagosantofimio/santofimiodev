@@ -1,9 +1,9 @@
 /*
-  En "Cómo trabajo", cada paso se enciende cuando llega a la mitad de la
+  En "Cómo trabajo", cada principio se enciende cuando llega a la mitad de la
   pantalla. El tramo de línea que lleva a un paso se llena cuando ese paso se
   enciende (lo resuelve el CSS con :has).
 */
-export function iniciarProceso() {
+export function iniciarPasos() {
   const pasos = document.querySelectorAll<HTMLElement>("[data-paso]");
   if (pasos.length === 0) return;
 

@@ -2,29 +2,25 @@
 import Base from "@/layouts/Base.astro";
 import Navbar from "@/componentes/Navbar.astro";
 import Hero from "@/componentes/Hero.astro";
-import QueHago from "@/componentes/QueHago.astro";
-import ComoTrabajo from "@/componentes/ComoTrabajo.astro";
-import Presupuesto from "@/componentes/Presupuesto.astro";
-import Stack from "@/componentes/Stack.astro";
-import Proyectos from "@/componentes/Proyectos.astro";
 import SobreMi from "@/componentes/SobreMi.astro";
+import Proyectos from "@/componentes/Proyectos.astro";
+import Habilidades from "@/componentes/Habilidades.astro";
+import Principios from "@/componentes/Principios.astro";
 import Contacto from "@/componentes/Contacto.astro";
 import Footer from "@/componentes/Footer.astro";
 ---
 
 <Base
-  titulo="Santiago Santofimio, páginas web para negocios en Bogotá"
-  descripcion="Hago la página web de tu negocio en Bogotá. Se ve bien en el celular y sabes cuánto cuesta antes de empezar: calcula el precio en la página."
+  titulo="Santiago Santofimio, desarrollador web en Bogotá"
+  descripcion="Desarrollador web en Bogotá. Interfaces rápidas y accesibles con Astro, React y TypeScript, y backend con Java y Spring Boot. Busco trabajo en un equipo de desarrollo."
 >
   <Navbar />
   <main id="contenido" tabindex="-1">
     <Hero />
-    <QueHago />
-    <ComoTrabajo />
-    <Presupuesto />
-    <Stack />
-    <Proyectos />
     <SobreMi />
+    <Proyectos />
+    <Habilidades />
+    <Principios />
     <Contacto />
   </main>
   <Footer />

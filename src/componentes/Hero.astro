@@ -1,43 +1,61 @@
 ---
+import { HandPointingIcon } from "@phosphor-icons/react/ssr";
 import Boton from "@/componentes/Boton.astro";
-import PantallaNegocio from "@/componentes/PantallaNegocio.astro";
-import { enlaceWhatsApp, TEXTO_CTA_WHATSAPP } from "@/lib/whatsapp";
+import { perfil } from "@/datos/perfil";
 
-const palabras = "Hago la página web de tu negocio en Bogotá.".split(" ");
+const [nombre, apellido] = perfil.nombre.split(" ");
+let indice = 0;
+const lineas = [nombre, apellido].map((palabra) => [...palabra].map((letra) => ({ letra, i: indice++ })));
 ---
 
 <section id="inicio" tabindex="-1" aria-labelledby="titulo-inicio" class="relative isolate overflow-x-clip">
   <div
     aria-hidden="true"
-    class="pointer-events-none absolute top-0 right-0 -z-10 h-[40rem] w-[min(60rem,100%)] bg-[radial-gradient(closest-side,color-mix(in_oklab,var(--texto)_7%,transparent),transparent)]"
+    class="pointer-events-none absolute -top-40 left-1/2 -z-10 h-[44rem] w-[min(80rem,140%)] -translate-x-1/2 bg-[radial-gradient(closest-side,color-mix(in_oklab,var(--texto)_6%,transparent),transparent)]"
   >
   </div>
+
   <div
-    class="mx-auto grid max-w-[1400px] grid-cols-12 items-center gap-x-6 gap-y-16 px-margen pt-12 pb-20 md:pt-16 lg:min-h-[calc(100svh-4rem)] lg:pt-10 lg:pb-16"
+    class="mx-auto flex max-w-[1400px] flex-col px-margen pt-10 pb-20 md:pt-16 lg:min-h-[calc(100svh-4rem)] lg:justify-center lg:pb-24"
   >
-    <div class="col-span-12 lg:col-span-7">
-      <h1 id="titulo-inicio" class="text-titulo-hero font-extrabold">
-        {
-          palabras.map((palabra, indice) => (
-            <>
-              <span class="palabra" style={`--i: ${indice}`}>
-                {palabra}
-              </span>{" "}
-            </>
-          ))
-        }
-      </h1>
-      <p class="entrada mt-8 max-w-[34ch] text-entrada text-texto-suave" style="--retraso: 420ms">
-        Se ve bien en el celular y sabes cuánto cuesta antes de que empiece a construirla.
+    <div class="entrada flex flex-wrap items-center justify-between gap-x-6 gap-y-2" style="--retraso: 60ms">
+      <p class="font-mono text-etiqueta text-texto-suave">{perfil.busqueda}</p>
+      <p class="hidden items-center gap-2 font-mono text-etiqueta text-texto-suave sm:flex" aria-hidden="true">
+        <HandPointingIcon size={16} />
+        <span class="pista-mouse">Pasa el mouse por el nombre</span>
+        <span class="pista-tactil">Toca el nombre</span>
       </p>
-      <div class="entrada mt-8 grid gap-3 sm:flex sm:flex-wrap" style="--retraso: 520ms">
-        <Boton href={enlaceWhatsApp("general")} icono="whatsapp">{TEXTO_CTA_WHATSAPP}</Boton>
-        <Boton href="#presupuesto" variante="secundario" icono="abajo">Calcula el precio</Boton>
-      </div>
     </div>
 
-    <div class="col-span-12 lg:col-span-5">
-      <PantallaNegocio />
+    <h1 id="titulo-inicio" class="mt-6 text-nombre select-none" data-nombre>
+      <span class="sr-only">{perfil.nombre}</span>
+      <span aria-hidden="true" class="block">
+        {
+          lineas.map((linea) => (
+            <span class="block whitespace-nowrap">
+              {linea.map(({ letra, i }) => (
+                <span class="letra" data-letra style={`--i: ${i}`}>
+                  {letra}
+                </span>
+              ))}
+            </span>
+          ))
+        }
+      </span>
+    </h1>
+
+    <div class="mt-10 grid gap-8 md:mt-14 md:grid-cols-12 md:items-end">
+      <p class="entrada max-w-[36ch] text-entrada text-texto-suave md:col-span-6" style="--retraso: 700ms">
+        {perfil.oficio} en {perfil.ciudad}. Hago interfaces rápidas y accesibles con Astro, React y TypeScript, y
+        backend con Java.
+      </p>
+      <div
+        class="entrada grid gap-3 sm:flex sm:flex-wrap md:col-span-6 md:justify-end"
+        style="--retraso: 820ms"
+      >
+        <Boton href="#proyectos" pieza="abajo" magnetico>Ver proyectos</Boton>
+        <Boton href={`mailto:${perfil.correo}`} variante="secundario" magnetico>Escríbeme</Boton>
+      </div>
     </div>
   </div>
 </section>

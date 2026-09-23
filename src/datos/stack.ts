@@ -1,12 +1,8 @@
 import type { Logo } from "@/lib/logos";
 
-/** Herramientas sin logo propio: se muestran con un icono. */
-export type IconoStack = "movil" | "accesibilidad" | "rendimiento";
-
 export interface ItemStack {
   nombre: string;
-  logos?: Logo[];
-  icono?: IconoStack;
+  logos: Logo[];
 }
 
 export interface GrupoStack {
@@ -31,9 +27,6 @@ export const stack: GrupoStack[] = [
       { nombre: "Git y GitHub", logos: ["git", "github"] },
       { nombre: "Docker, en lo básico", logos: ["docker"] },
       { nombre: "Cloudflare Pages, Netlify y despliegue continuo", logos: ["cloudflarepages", "netlify"] },
-      { nombre: "Diseño responsive mobile-first", icono: "movil" },
-      { nombre: "Accesibilidad WCAG AA", icono: "accesibilidad" },
-      { nombre: "Optimización de imágenes y rendimiento", icono: "rendimiento" },
     ],
   },
   {

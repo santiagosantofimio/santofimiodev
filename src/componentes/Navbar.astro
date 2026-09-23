@@ -1,26 +1,28 @@
 ---
 import AlternarTema from "@/islas/AlternarTema";
 import MenuCelular from "@/islas/MenuCelular";
-import Boton from "@/componentes/Boton.astro";
 import { perfil } from "@/datos/perfil";
-import { enlaceWhatsApp, TEXTO_CTA_WHATSAPP } from "@/lib/whatsapp";
 
 const enlaces = [
-  { href: "#servicios", texto: "Qué hago" },
-  { href: "#proceso", texto: "Cómo trabajo" },
-  { href: "#presupuesto", texto: "Precios" },
+  { href: "#sobre-mi", texto: "Sobre mí" },
+  { href: "#proyectos", texto: "Proyectos" },
+  { href: "#habilidades", texto: "Habilidades" },
   { href: "#contacto", texto: "Contacto" },
 ];
-
-const whatsapp = enlaceWhatsApp("general");
 ---
 
 <header data-navbar class="sticky top-0 z-30 h-16">
-  <div aria-hidden="true" class="navbar-fondo absolute inset-0 border-b border-linea bg-fondo"></div>
+  <div aria-hidden="true" class="navbar-isla absolute inset-y-1.5"></div>
+  <div aria-hidden="true" class="progreso-lectura absolute bottom-1.5"></div>
   <div
-    class="navbar-contenido relative mx-auto flex h-full max-w-[1400px] items-center justify-between gap-6 px-margen"
+    class="relative mx-auto flex h-full max-w-[1400px] items-center justify-between gap-6 px-margen"
   >
-    <a href="#inicio" class="font-display text-[1.0625rem] font-bold tracking-[-0.02em]">
+    <a href="#inicio" class="flex min-h-11 items-center gap-2.5 font-display text-[1.0625rem] font-bold tracking-[-0.02em]">
+      <span
+        aria-hidden="true"
+        class="inline-flex size-7 items-center justify-center rounded-[0.3125rem] bg-acento text-[0.9375rem] font-extrabold text-sobre-acento"
+        >S.</span
+      >
       {perfil.nombre}
     </a>
 
@@ -43,11 +45,11 @@ const whatsapp = enlaceWhatsApp("general");
 
     <div class="flex items-center gap-2">
       <AlternarTema client:idle />
-      <Boton href={whatsapp} icono="whatsapp" compacto class="hidden lg:inline-flex">
-        {TEXTO_CTA_WHATSAPP}
-      </Boton>
+      <a href={`mailto:${perfil.correo}`} data-magnetico class="boton boton-primario boton-compacto hidden lg:inline-flex">
+        Escríbeme
+      </a>
       <div class="lg:hidden">
-        <MenuCelular client:media="(max-width: 1023px)" enlaces={enlaces} whatsapp={whatsapp} textoWhatsapp={TEXTO_CTA_WHATSAPP} />
+        <MenuCelular client:media="(max-width: 1023px)" enlaces={enlaces} correo={perfil.correo} textoCorreo="Escríbeme" />
       </div>
     </div>
   </div>

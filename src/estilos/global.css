@@ -58,19 +58,21 @@
   --text-titulo-1: clamp(2.75rem, 1.2rem + 5.2vw, 5.75rem);
   --text-titulo-1--line-height: 0.98;
   --text-titulo-1--letter-spacing: -0.045em;
-  --text-titulo-hero: clamp(2.625rem, 1.5rem + 3.3vw, 4.125rem);
-  --text-titulo-hero--line-height: 1;
-  --text-titulo-hero--letter-spacing: -0.045em;
+  --text-nombre: clamp(3.25rem, 0.5rem + 13vw, 13rem);
+  --text-nombre--line-height: 0.9;
+  --text-nombre--letter-spacing: -0.05em;
 
-  /* Esquinas: un solo radio para todo lo que tiene borde. Sin píldoras. */
+  /* Esquinas: 8 px para todo. Las tarjetas dobles usan un marco de 12 px con el núcleo de 8 px adentro. */
   --radius-base: 0.5rem;
+  --radius-marco: 0.75rem;
 
   /* Espaciado: la escala de Tailwind (múltiplos de 4 px) más dos medidas de página. */
   --spacing-margen: clamp(1.25rem, 0.6rem + 2.8vw, 3rem);
   --spacing-seccion: clamp(5rem, 3.2rem + 7vw, 9.5rem);
 
-  /* Movimiento: una curva de salida propia y tres duraciones. */
+  /* Movimiento: una curva para lo que entra o sale y otra para lo que se transforma en pantalla. */
   --ease-salida: cubic-bezier(0.2, 0.85, 0.25, 1);
+  --ease-movimiento: cubic-bezier(0.77, 0, 0.175, 1);
   --duracion-corta: 160ms;
   --duracion-ui: 220ms;
   --duracion-media: 300ms;
@@ -93,6 +95,10 @@
   html {
     background-color: var(--fondo);
     -webkit-text-size-adjust: 100%;
+  }
+
+  html.menu-abierto {
+    overflow: hidden;
   }
 
   body {
@@ -133,7 +139,12 @@
   }
 }
 
-/* Transición de colores al cambiar de tema, solo mientras dura el cambio. */
+/* Las secciones y el main reciben el foco al saltar a ellos; el contorno sobra ahí. */
+[tabindex="-1"]:focus {
+  outline: none;
+}
+
+/* ---------- Cambio de tema ---------- */
 html.cambiando-tema,
 html.cambiando-tema * {
   transition:
@@ -142,16 +153,48 @@ html.cambiando-tema * {
     border-color var(--duracion-media) var(--ease-salida) !important;
 }
 
-/*
-  Apariciones al hacer scroll. En escritorio basta una transición; en celular el
-  scroll con inercia se salta el estado intermedio de una transición disparada
-  por JavaScript, así que ahí se usa una animación por keyframes, que sí corre
-  completa.
-*/
+/* El círculo lo dibuja tema.ts; aquí solo se apaga el fundido por defecto. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-new(root) {
+  z-index: 2;
+}
+
+.alternar-tema {
+  position: relative;
+}
+
+.icono-sol,
+.icono-luna {
+  position: absolute;
+  transition:
+    opacity var(--duracion-media) var(--ease-salida),
+    transform var(--duracion-larga) var(--ease-salida);
+}
+
+.icono-luna,
+:root[data-tema="claro"] .icono-sol {
+  opacity: 0;
+  transform: rotate(-90deg) scale(0.5);
+}
+
+:root[data-tema="claro"] .icono-luna {
+  opacity: 1;
+  transform: none;
+}
+
+/* ---------- Apariciones al hacer scroll ----------
+  En escritorio basta una transición; en celular el scroll con inercia se salta
+  el estado intermedio de una transición disparada por JavaScript, así que ahí
+  se usa una animación por keyframes, que sí corre completa. */
 @keyframes aparecer {
   from {
     opacity: 0;
-    transform: translate3d(0, 1rem, 0);
+    transform: translate3d(0, 1.25rem, 0);
   }
   to {
     opacity: 1;
@@ -162,31 +205,37 @@ html.cambiando-tema * {
 @media (prefers-reduced-motion: no-preference) {
   html.js [data-aparece] {
     opacity: 0;
-    transform: translate3d(0, 1rem, 0);
+    transform: translate3d(0, 1.25rem, 0);
+    filter: blur(6px);
   }
 
   html.js [data-aparece].visible {
     opacity: 1;
     transform: none;
+    filter: blur(0);
     transition:
       opacity var(--duracion-larga) var(--ease-salida) var(--retraso, 0ms),
-      transform var(--duracion-larga) var(--ease-salida) var(--retraso, 0ms);
+      transform var(--duracion-larga) var(--ease-salida) var(--retraso, 0ms),
+      filter var(--duracion-larga) var(--ease-salida) var(--retraso, 0ms);
   }
 
   @media (max-width: 639px) {
+    html.js [data-aparece] {
+      filter: none;
+    }
+
     html.js [data-aparece].visible {
       transition: none;
       animation: aparecer var(--duracion-larga) var(--ease-salida) var(--retraso, 0ms) both;
     }
   }
 
-  /* Entrada del hero al cargar, sin esperar a ningún observador. */
   .entrada {
     animation: aparecer var(--duracion-larga) var(--ease-salida) var(--retraso, 0ms) both;
   }
 }
 
-/* Botones: el mismo radio de 8 px que todo lo demás. */
+/* ---------- Botones ---------- */
 @layer components {
   .boton {
     display: inline-flex;
@@ -207,11 +256,17 @@ html.cambiando-tema * {
       background-color var(--duracion-media) var(--ease-salida),
       border-color var(--duracion-media) var(--ease-salida),
       color var(--duracion-media) var(--ease-salida),
-      transform var(--duracion-corta) var(--ease-salida);
+      transform var(--duracion-corta) var(--ease-salida),
+      translate var(--duracion-media) var(--ease-salida);
   }
 
   .boton:active {
     transform: scale(0.97);
+  }
+
+  .boton:disabled {
+    opacity: 0.5;
+    pointer-events: none;
   }
 
   .boton-primario {
@@ -226,7 +281,7 @@ html.cambiando-tema * {
 
   .boton-compacto {
     min-height: 2.5rem;
-    padding-inline: 1rem;
+    padding-inline: 0.875rem;
   }
 
   .boton-icono {
@@ -236,7 +291,26 @@ html.cambiando-tema * {
     color: var(--texto);
   }
 
-  @media (hover: hover) {
+  /* Botón con el icono en su propia pieza, pegada al borde derecho. */
+  .boton-con-pieza {
+    padding-right: 0.25rem;
+  }
+
+  .boton-pieza {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 0.3125rem;
+    background: color-mix(in oklab, currentColor 12%, transparent);
+  }
+
+  .boton-pieza > svg {
+    transition: transform var(--duracion-media) var(--ease-salida);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
     .boton-primario:hover {
       background-color: color-mix(in oklab, var(--acento) 86%, var(--texto));
     }
@@ -248,6 +322,14 @@ html.cambiando-tema * {
     .boton-icono:hover {
       border-color: var(--linea-fuerte);
     }
+
+    .boton:hover .pieza-diagonal {
+      transform: translate3d(2px, -2px, 0);
+    }
+
+    .boton:hover .pieza-abajo {
+      transform: translate3d(0, 2px, 0);
+    }
   }
 
   .enlace {
@@ -258,336 +340,207 @@ html.cambiando-tema * {
     transition: text-decoration-color var(--duracion-media) var(--ease-salida);
   }
 
-  @media (hover: hover) {
+  @media (hover: hover) and (pointer: fine) {
     .enlace:hover {
       text-decoration-color: var(--acento);
     }
   }
 }
 
-/* Navbar: al bajar, aparece el fondo y el contenido sube a su altura compacta. */
-.navbar-fondo {
+/* ---------- Navbar: al bajar aparece una barra flotante detrás del contenido ----------
+  El contenido no se transforma: el panel del menú de celular es `fixed` y un
+  ancestro con transform lo encerraría. */
+.navbar-isla {
+  left: max(0.5rem, calc((100% - 1400px) / 2 + var(--spacing-margen) - 0.875rem));
+  right: max(0.5rem, calc((100% - 1400px) / 2 + var(--spacing-margen) - 0.875rem));
+  border: 1px solid var(--linea);
+  border-radius: var(--radius-marco);
+  background: var(--superficie);
+  box-shadow: 0 1rem 2.5rem -1.25rem color-mix(in oklab, black 60%, transparent);
+  opacity: 0;
+  transform: scale(0.98, 0.9);
+  transition:
+    opacity var(--duracion-media) var(--ease-salida),
+    transform var(--duracion-media) var(--ease-movimiento);
+}
+
+[data-compacto="true"] .navbar-isla {
+  opacity: 1;
+  transform: none;
+}
+
+/* Barra de lectura: avanza con el scroll de la página, sin JavaScript. */
+.progreso-lectura {
+  left: calc(max(0.5rem, calc((100% - 1400px) / 2 + var(--spacing-margen) - 0.875rem)) + var(--radius-marco));
+  right: calc(max(0.5rem, calc((100% - 1400px) / 2 + var(--spacing-margen) - 0.875rem)) + var(--radius-marco));
+  height: 1px;
+  background: var(--texto-suave);
+  transform-origin: left;
+  transform: scaleX(0);
   opacity: 0;
   transition: opacity var(--duracion-media) var(--ease-salida);
 }
 
-.navbar-contenido {
-  transform: translate3d(0, 0.5rem, 0);
-  transition: transform var(--duracion-media) var(--ease-salida);
-}
-
-[data-compacto="true"] .navbar-fondo {
+[data-compacto="true"] .progreso-lectura {
   opacity: 1;
 }
 
-[data-compacto="true"] .navbar-contenido {
-  transform: none;
+@keyframes progreso {
+  to {
+    transform: scaleX(1);
+  }
 }
 
-/* Panel del menú de celular. La visibilidad cambia al final al cerrar, para que se vea la salida. */
+@supports (animation-timeline: scroll()) {
+  .progreso-lectura {
+    animation: progreso linear both;
+    animation-timeline: scroll(root);
+  }
+}
+
+/* ---------- Menú de celular ---------- */
+.hamburguesa {
+  position: relative;
+}
+
+.hamburguesa-linea {
+  position: absolute;
+  width: 1.125rem;
+  height: 1.5px;
+  border-radius: 1px;
+  background: currentColor;
+  transition: transform var(--duracion-media) var(--ease-movimiento);
+}
+
+.hamburguesa-linea:first-child {
+  transform: translate3d(0, -3.5px, 0);
+}
+
+.hamburguesa-linea:last-child {
+  transform: translate3d(0, 3.5px, 0);
+}
+
+.hamburguesa[data-abierto="true"] .hamburguesa-linea:first-child {
+  transform: rotate(45deg);
+}
+
+.hamburguesa[data-abierto="true"] .hamburguesa-linea:last-child {
+  transform: rotate(-45deg);
+}
+
 .panel-menu {
   opacity: 0;
-  transform: translate3d(0, -0.5rem, 0);
   visibility: hidden;
   transition:
-    opacity var(--duracion-corta) var(--ease-salida),
-    transform var(--duracion-corta) var(--ease-salida),
-    visibility 0s linear var(--duracion-corta);
+    opacity var(--duracion-ui) var(--ease-salida),
+    visibility 0s linear var(--duracion-ui);
 }
 
-/* Abre un poco más lento de lo que cierra: la salida no debe hacer esperar. */
 .panel-menu[data-abierto="true"] {
   opacity: 1;
-  transform: none;
   visibility: visible;
-  transition-duration: var(--duracion-ui), var(--duracion-ui), 0s;
   transition-delay: 0s;
 }
 
-/* Opciones del estimador: radios nativos, vestidos de botón grande. */
-.opcion {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
-  min-height: 3.5rem;
-  padding: 0.75rem 1rem;
-  border: 1px solid var(--linea-fuerte);
-  border-radius: var(--radius-base);
-  cursor: pointer;
-  user-select: none;
-  -webkit-tap-highlight-color: transparent;
+.menu-item {
+  opacity: 0;
+  transform: translate3d(0, 1.5rem, 0);
   transition:
-    border-color var(--duracion-ui) var(--ease-salida),
-    background-color var(--duracion-ui) var(--ease-salida),
+    opacity var(--duracion-corta) var(--ease-salida),
     transform var(--duracion-corta) var(--ease-salida);
 }
 
-.opcion:active {
-  transform: scale(0.98);
-}
-
-.opcion:has(:checked) {
-  border-color: var(--acento);
-  background-color: var(--superficie);
-}
-
-.opcion:has(:focus-visible) {
-  outline: 2px solid var(--acento);
-  outline-offset: 3px;
-}
-
-.opcion-marca {
-  flex-shrink: 0;
-  color: var(--acento);
-  opacity: 0;
-  transform: scale(0.8);
-  transition:
-    opacity var(--duracion-ui) var(--ease-salida),
-    transform var(--duracion-ui) var(--ease-salida);
-}
-
-.opcion:has(:checked) .opcion-marca {
+/* Entran en cascada; al cerrar salen todos juntos y rápido. */
+.panel-menu[data-abierto="true"] .menu-item {
   opacity: 1;
   transform: none;
+  transition-duration: var(--duracion-larga);
+  transition-delay: calc(80ms + var(--i, 0) * 55ms);
 }
 
-@media (hover: hover) and (pointer: fine) {
-  .opcion:hover {
-    border-color: var(--texto);
-  }
-
-  .opcion:has(:checked):hover {
-    border-color: var(--acento);
-  }
-}
-
-/* Barra del estimado en celular: entra desde abajo la primera vez que aparece. */
-.barra-estimado {
-  transition:
-    opacity var(--duracion-ui) var(--ease-salida),
-    transform var(--duracion-ui) var(--ease-salida);
-
-  @starting-style {
-    opacity: 0;
-    transform: translate3d(0, 100%, 0);
-  }
-}
-
-/* Etiquetas del stack. Las de "aprendiendo" van con borde punteado, sin pedir disculpas. */
-.etiqueta {
-  display: inline-flex;
-  align-items: center;
-  min-height: 2.25rem;
-  padding: 0.375rem 0.75rem;
-  border: 1px solid var(--linea-fuerte);
-  border-radius: var(--radius-base);
-  font-family: var(--font-mono);
-  font-size: var(--text-etiqueta);
-  line-height: 1.3;
-}
-
-.etiqueta-aprendiendo {
-  border-style: dashed;
-  color: var(--texto-suave);
-}
-
-/* Las secciones y el main reciben el foco al saltar a ellos; el contorno sobra ahí. */
-[tabindex="-1"]:focus {
-  outline: none;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .navbar-fondo,
-  .navbar-contenido,
-  .panel-menu,
-  .boton,
-  .barra-estimado {
-    transition: none;
-  }
-
-  .opcion,
-  .opcion-marca {
-    transition-property: border-color, background-color, opacity;
-  }
-
-  .boton:active,
-  .opcion:active,
-  .opcion-marca {
-    transform: none;
-  }
-}
-
-/* Flecha de enlace externo: se corre hacia donde apunta al pasar el mouse. */
-.flecha {
-  transition: transform var(--duracion-ui) var(--ease-salida);
-}
-
-@media (hover: hover) and (pointer: fine) {
-  a:hover > .flecha {
-    transform: translate3d(2px, -2px, 0);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .flecha {
-    transition: none;
-  }
-}
-
-/* ---------- Hero: titular palabra por palabra ---------- */
-.palabra {
+/* ---------- Hero: el nombre ---------- */
+.letra {
   display: inline-block;
+  font-weight: 800;
 }
 
-@keyframes palabra {
+@keyframes letra-entra {
   from {
     opacity: 0;
-    transform: translate3d(0, 0.35em, 0);
-    filter: blur(6px);
+    transform: translate3d(0, 0.3em, 0);
+    font-weight: 300;
+    filter: blur(8px);
   }
   to {
     opacity: 1;
     transform: none;
+    font-weight: 800;
     filter: blur(0);
   }
 }
 
-/* ---------- Hero: la pantalla que se arma sola ---------- */
-.pantalla {
-  aspect-ratio: 9 / 17;
-  border: 1px solid var(--linea-fuerte);
-  border-radius: var(--radius-base);
-  background: var(--fondo);
-  box-shadow: 0 1.5rem 4rem -1.5rem color-mix(in oklab, black 55%, transparent);
+/* La pista del nombre cambia según haya mouse o solo pantalla táctil. */
+.pista-tactil {
+  display: none;
 }
 
-.bloque {
-  border: 1px solid var(--linea);
-  border-radius: calc(var(--radius-base) - 2px);
-  background: var(--superficie);
-}
-
-.barra {
-  display: block;
-  height: 0.5rem;
-  border-radius: 2px;
-  background: var(--linea-fuerte);
-  opacity: 0.55;
-}
-
-.nota {
-  display: flex;
-  align-items: center;
-  gap: 0.625rem;
-  padding: 0.625rem 0.875rem;
-  border: 1px solid var(--linea);
-  border-radius: var(--radius-base);
-  background: var(--superficie);
-  color: var(--texto-suave);
-  font-size: var(--text-pequeno);
-  line-height: 1.3;
-}
-
-@keyframes armar {
-  from {
-    opacity: 0;
-    transform: translate3d(0, 0.75rem, 0) scale(0.97);
+@media (hover: none) {
+  .pista-mouse {
+    display: none;
   }
-  to {
-    opacity: 1;
-    transform: none;
+
+  .pista-tactil {
+    display: inline;
   }
 }
 
-/* Un paso de la explicación a la vez: el bloque y su nota se iluminan juntos. */
-@keyframes resaltar-bloque {
-  0%,
-  25%,
-  100% {
-    border-color: var(--linea);
-    background-color: var(--superficie);
-  }
-  3%,
-  22% {
-    border-color: var(--texto-suave);
-    background-color: var(--superficie-alta);
-  }
-}
-
-@keyframes resaltar-nota {
-  0%,
-  25%,
-  100% {
-    border-color: var(--linea);
-    color: var(--texto-suave);
-  }
-  3%,
-  22% {
-    border-color: var(--linea-fuerte);
-    color: var(--texto);
-  }
-}
-
-/* ---------- Tarjetas con brillo al pasar el mouse ---------- */
+/* ---------- Tarjetas dobles: marco y núcleo ---------- */
 .tarjeta {
   position: relative;
-  isolation: isolate;
-  overflow: hidden;
+  padding: 0.25rem;
   border: 1px solid var(--linea);
-  border-radius: var(--radius-base);
-  background: var(--superficie);
+  border-radius: var(--radius-marco);
+  background: color-mix(in oklab, var(--superficie) 45%, transparent);
   transition:
     border-color var(--duracion-media) var(--ease-salida),
     transform var(--duracion-ui) var(--ease-salida);
 }
 
-.tarjeta::before {
+.nucleo {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  height: 100%;
+  border-radius: var(--radius-base);
+  background: var(--superficie);
+  box-shadow:
+    inset 0 1px 0 color-mix(in oklab, var(--texto) 7%, transparent),
+    0 1.5rem 3rem -2rem color-mix(in oklab, black 55%, transparent);
+}
+
+.nucleo::before {
   content: "";
   position: absolute;
   inset: 0;
   z-index: -1;
   background: radial-gradient(
-    26rem circle at var(--luz-x, 50%) var(--luz-y, 0%),
-    color-mix(in oklab, var(--texto) 9%, transparent),
+    24rem circle at var(--luz-x, 50%) var(--luz-y, 0%),
+    color-mix(in oklab, var(--texto) 8%, transparent),
     transparent 60%
   );
   opacity: 0;
   transition: opacity var(--duracion-media) var(--ease-salida);
-}
-
-.tarjeta-invertida {
-  border-color: var(--acento);
-  background: var(--acento);
-  color: var(--sobre-acento);
-}
-
-.tarjeta-invertida::before {
-  background: radial-gradient(
-    26rem circle at var(--luz-x, 50%) var(--luz-y, 0%),
-    color-mix(in oklab, var(--sobre-acento) 10%, transparent),
-    transparent 60%
-  );
 }
 
 .icono-tarjeta {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 3rem;
-  height: 3rem;
+  width: 2.75rem;
+  height: 2.75rem;
   border: 1px solid var(--linea-fuerte);
   border-radius: var(--radius-base);
   color: var(--texto);
-}
-
-.tarjeta-invertida .texto-secundario {
-  color: color-mix(in oklab, var(--sobre-acento) 72%, var(--acento));
-}
-
-.tarjeta-invertida .icono-tarjeta {
-  border-color: color-mix(in oklab, var(--sobre-acento) 35%, transparent);
-  color: var(--sobre-acento);
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -596,16 +549,106 @@ html.cambiando-tema * {
     transform: translate3d(0, -3px, 0);
   }
 
-  .tarjeta-invertida:hover {
-    border-color: var(--acento);
-  }
-
-  .tarjeta:hover::before {
+  .tarjeta:hover .nucleo::before {
     opacity: 1;
   }
 }
 
-/* ---------- Cómo trabajo: pasos que se encienden y la línea que los une ---------- */
+/* Formación: tres tarjetas apiladas y un poco giradas, que se enderezan al pasar el mouse. */
+@media (min-width: 1024px) {
+  .cascada > li {
+    rotate: var(--giro, 0deg);
+    transition:
+      rotate var(--duracion-larga) var(--ease-salida),
+      translate var(--duracion-larga) var(--ease-salida);
+  }
+
+  .cascada > li + li {
+    margin-top: -1.25rem;
+  }
+
+  .cascada > li:hover {
+    z-index: 1;
+    rotate: 0deg;
+    translate: 0 -0.5rem;
+  }
+}
+
+/* ---------- Demo de ordenamiento ---------- */
+.barra-orden {
+  flex: 1;
+  height: 100%;
+  border-radius: 2px 2px 0 0;
+  background: var(--texto-suave);
+  transform-origin: bottom;
+  transition:
+    transform 120ms var(--ease-salida),
+    background-color 120ms var(--ease-salida);
+}
+
+.barra-orden[data-activo="true"] {
+  background: var(--texto);
+}
+
+@keyframes barrido {
+  40% {
+    background-color: var(--texto);
+  }
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.25rem;
+  padding-inline: 0.75rem;
+  border: 1px solid var(--linea-fuerte);
+  border-radius: var(--radius-base);
+  font-size: var(--text-etiqueta);
+  font-family: var(--font-mono);
+  cursor: pointer;
+  transition:
+    background-color var(--duracion-ui) var(--ease-salida),
+    border-color var(--duracion-ui) var(--ease-salida),
+    color var(--duracion-ui) var(--ease-salida),
+    transform var(--duracion-corta) var(--ease-salida);
+}
+
+.chip:active {
+  transform: scale(0.97);
+}
+
+.chip:has(:checked) {
+  border-color: var(--acento);
+  background: var(--acento);
+  color: var(--sobre-acento);
+}
+
+.chip:has(:focus-visible) {
+  outline: 2px solid var(--acento);
+  outline-offset: 3px;
+}
+
+fieldset:disabled .chip {
+  opacity: 0.55;
+  cursor: default;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .chip:hover {
+    border-color: var(--texto);
+  }
+}
+
+/* ---------- Medidor de contraste ---------- */
+.muestra {
+  display: inline-flex;
+  width: 1.25rem;
+  height: 1.25rem;
+  border: 1px solid var(--linea-fuerte);
+  border-radius: 0.25rem;
+}
+
+/* ---------- Principios: se encienden en orden, con la línea que los une ---------- */
 .paso {
   position: relative;
 }
@@ -635,7 +678,6 @@ html:not(.js) .paso-icono {
   color: var(--sobre-acento);
 }
 
-/* El tramo sale de cada paso hacia el siguiente: vertical en celular, horizontal desde lg. */
 .paso:not(:last-child)::before,
 .paso:not(:last-child)::after {
   content: "";
@@ -676,12 +718,30 @@ html:not(.js) .paso::after {
   }
 }
 
-/* ---------- Logos y cinta del stack ---------- */
+/* ---------- Logos, etiquetas y cinta ---------- */
 .logo {
   width: 1em;
   height: 1em;
   flex-shrink: 0;
   fill: currentColor;
+}
+
+.etiqueta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.25rem;
+  padding: 0.375rem 0.75rem;
+  border: 1px solid var(--linea-fuerte);
+  border-radius: var(--radius-base);
+  font-family: var(--font-mono);
+  font-size: var(--text-etiqueta);
+  line-height: 1.3;
+}
+
+.etiqueta-aprendiendo {
+  border-style: dashed;
+  color: var(--texto-suave);
 }
 
 .cinta {
@@ -708,43 +768,99 @@ html:not(.js) .paso::after {
   }
 }
 
-/* ---------- Estimador: el rango cambia con un fundido corto ---------- */
-@keyframes cambiar {
-  from {
-    opacity: 0;
-    transform: translate3d(0, 0.25rem, 0);
-    filter: blur(4px);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-    filter: blur(0);
+/* Flecha de enlace externo: se corre hacia donde apunta. */
+.flecha {
+  transition: transform var(--duracion-ui) var(--ease-salida);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  a:hover > .flecha,
+  a:hover .flecha {
+    transform: translate3d(2px, -2px, 0);
   }
 }
 
+/* ---------- Contacto ---------- */
+.fila-contacto {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 4.5rem;
+  padding-inline: 0.75rem;
+  border-bottom: 1px solid var(--linea);
+  font-family: var(--font-display);
+  font-size: clamp(1.125rem, 0.95rem + 0.8vw, 1.5rem);
+  font-weight: 700;
+  letter-spacing: -0.015em;
+}
+
+/* El fondo entra desde la izquierda con clip-path; sale rápido al soltar. */
+.fila-contacto::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: var(--radius-base);
+  background: var(--superficie);
+  clip-path: inset(0 100% 0 0 round var(--radius-base));
+  transition: clip-path var(--duracion-ui) var(--ease-salida);
+}
+
+.fila-contacto .flecha {
+  color: var(--texto-suave);
+  transition:
+    transform var(--duracion-media) var(--ease-salida),
+    color var(--duracion-media) var(--ease-salida);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .fila-contacto:hover::before {
+    clip-path: inset(0 0 0 0 round var(--radius-base));
+    transition-duration: var(--duracion-media);
+  }
+
+  .fila-contacto:hover .flecha {
+    color: var(--texto);
+    transform: translate3d(3px, -3px, 0);
+  }
+}
+
+.copiar-texto {
+  display: grid;
+}
+
+.copiar-texto > * {
+  grid-area: 1 / 1;
+  transition:
+    opacity var(--duracion-ui) var(--ease-salida),
+    filter var(--duracion-ui) var(--ease-salida),
+    transform var(--duracion-ui) var(--ease-salida);
+}
+
+.copiar-listo,
+[data-copiado="true"] .copiar-normal {
+  opacity: 0;
+  filter: blur(4px);
+  transform: translate3d(0, 0.25rem, 0);
+}
+
+[data-copiado="true"] .copiar-listo {
+  opacity: 1;
+  filter: none;
+  transform: none;
+}
+
+/* ---------- Animaciones que dependen de la preferencia de movimiento ---------- */
 @media (prefers-reduced-motion: no-preference) {
-  .palabra {
-    animation: palabra 640ms var(--ease-salida) calc(var(--i, 0) * 45ms) both;
+  .letra {
+    animation: letra-entra 760ms var(--ease-salida) calc(120ms + var(--i, 0) * 35ms) backwards;
   }
 
-  .pantalla-armado {
-    animation: armar 620ms var(--ease-salida) calc(500ms + var(--paso, 0) * 200ms) both;
-  }
-
-  .bloque[data-resalta] {
-    animation:
-      armar 620ms var(--ease-salida) calc(500ms + var(--paso, 0) * 200ms) both,
-      resaltar-bloque 10s linear calc(2.2s + var(--turno, 0) * 2.5s) infinite;
-  }
-
-  .nota {
-    animation:
-      armar 620ms var(--ease-salida) calc(600ms + var(--paso, 0) * 200ms) both,
-      resaltar-nota 10s linear calc(2.2s + var(--turno, 0) * 2.5s) infinite;
-  }
-
-  .cambio {
-    animation: cambiar 260ms var(--ease-salida) both;
+  .demo-orden[data-estado="listo"] .barra-orden {
+    animation: barrido 520ms var(--ease-salida) calc(var(--i, 0) * 22ms);
   }
 
   html.js [data-pausable]:not(.en-pantalla) *,
@@ -754,6 +870,18 @@ html:not(.js) .paso::after {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .navbar-isla,
+  .panel-menu,
+  .menu-item,
+  .boton,
+  .hamburguesa-linea,
+  .icono-sol,
+  .icono-luna,
+  .cascada > li,
+  .barra-orden {
+    transition-property: opacity, background-color, border-color, color;
+  }
+
   .cinta-pista {
     flex-wrap: wrap;
     width: auto;
@@ -764,10 +892,16 @@ html:not(.js) .paso::after {
     display: none;
   }
 
+  .boton:active,
+  .chip:active {
+    transform: none;
+  }
+
   .tarjeta,
-  .tarjeta::before,
+  .nucleo::before,
   .paso-icono,
-  .flecha {
+  .flecha,
+  .fila-contacto .flecha {
     transition-property: border-color, background-color, color, opacity;
   }
 

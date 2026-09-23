@@ -1,7 +1,7 @@
 import type { Logo } from "@/lib/logos";
 
 export interface Proyecto {
-  id: string;
+  id: "sorting-visualizer" | "esta-pagina";
   nombre: string;
   descripcion: string;
   tecnologias: { nombre: string; logo: Logo }[];
@@ -21,5 +21,18 @@ export const proyectos: Proyecto[] = [
       { nombre: "JavaScript", logo: "javascript" },
     ],
     repositorio: "https://github.com/santiagosantofimio/SortingVisualizer",
+  },
+  {
+    id: "esta-pagina",
+    nombre: "Esta página",
+    descripcion:
+      "Hecha con Astro y React solo donde hay interacción. Sistema de diseño propio en CSS, contraste verificado por script y animaciones sin librerías.",
+    tecnologias: [
+      { nombre: "Astro", logo: "astro" },
+      { nombre: "React", logo: "react" },
+      { nombre: "TypeScript", logo: "typescript" },
+      { nombre: "Tailwind CSS", logo: "tailwindcss" },
+    ],
+    repositorio: "https://github.com/santiagosantofimio/santofimiodev",
   },
 ];

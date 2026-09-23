@@ -55,7 +55,7 @@ const persona = {
     <meta property="og:image:type" content="image/png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="Hago la página web de tu negocio en Bogotá. Santiago Santofimio." />
+    <meta property="og:image:alt" content="Santiago Santofimio, desarrollador web en Bogotá." />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={titulo} />
     <meta name="twitter:description" content={descripcion} />
@@ -88,16 +88,24 @@ const persona = {
     <slot />
     <script>
       import { iniciarApariciones } from "@/lib/apariciones";
+      import { iniciarContrasteVivo } from "@/lib/contraste-vivo";
+      import { iniciarCopiar } from "@/lib/copiar";
       import { iniciarDesplazamiento } from "@/lib/desplazamiento";
       import { iniciarLuz } from "@/lib/luz";
+      import { iniciarMagnetico } from "@/lib/magnetico";
+      import { iniciarNombre } from "@/lib/nombre";
+      import { iniciarPasos } from "@/lib/pasos";
       import { iniciarPausables } from "@/lib/pausables";
-      import { iniciarProceso } from "@/lib/proceso";
 
       iniciarApariciones();
       iniciarDesplazamiento();
+      iniciarNombre();
       iniciarLuz();
+      iniciarMagnetico();
       iniciarPausables();
-      iniciarProceso();
+      iniciarPasos();
+      iniciarContrasteVivo();
+      iniciarCopiar();
     </script>
   </body>
 </html>
