@@ -4,7 +4,7 @@ Mi página personal: quién soy, qué sé hacer y en qué he trabajado. Es una s
 Astro, con React únicamente donde hay interacción de verdad: la demo de ordenamiento, el cambio de
 tema y el menú del celular. Todo lo demás sale como HTML estático.
 
-En vivo: https://santofimiodev.pages.dev
+En vivo: [santofimiodev.pages.dev](https://santofimiodev.pages.dev)
 
 ## Correrla en tu máquina
 
