@@ -3,12 +3,21 @@ import { logos, type Logo } from "@/lib/logos";
 
 interface Props {
   logo: Logo;
+  /** Lado en píxeles. */
+  tamano?: number;
   class?: string;
 }
 
-const { logo, class: clase } = Astro.props;
+const { logo, tamano = 16, class: clase } = Astro.props;
+const { archivo, oscuro } = logos[logo] as { archivo: string; oscuro?: boolean };
 ---
 
-<svg class:list={["logo", clase]} viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-  <path d={logos[logo].path}></path>
-</svg>
+<img
+  src={`/logos/${archivo}.svg`}
+  alt=""
+  width={tamano}
+  height={tamano}
+  loading="lazy"
+  decoding="async"
+  class:list={["logo", oscuro && "logo-oscuro", clase]}
+/>

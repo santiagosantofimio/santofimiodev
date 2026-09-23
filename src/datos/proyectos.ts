@@ -15,9 +15,9 @@ export const proyectos: Proyecto[] = [
     descripcion:
       "Visualizador de algoritmos de ordenamiento. Una API en Spring Boot calcula cada paso de Bubble, Insertion, Selection, Merge y Quick Sort, y el navegador los anima barra por barra.",
     tecnologias: [
-      { nombre: "Java 21", logo: "openjdk" },
-      { nombre: "Spring Boot", logo: "springboot" },
-      { nombre: "Maven", logo: "apachemaven" },
+      { nombre: "Java 21", logo: "java" },
+      { nombre: "Spring Boot", logo: "spring" },
+      { nombre: "Maven", logo: "maven" },
       { nombre: "JavaScript", logo: "javascript" },
     ],
     repositorio: "https://github.com/santiagosantofimio/SortingVisualizer",

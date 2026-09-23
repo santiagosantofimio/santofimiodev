@@ -479,21 +479,6 @@ html.cambiando-tema * {
   }
 }
 
-/* La pista del nombre cambia según haya mouse o solo pantalla táctil. */
-.pista-tactil {
-  display: none;
-}
-
-@media (hover: none) {
-  .pista-mouse {
-    display: none;
-  }
-
-  .pista-tactil {
-    display: inline;
-  }
-}
-
 /* ---------- Tarjetas dobles: marco y núcleo ---------- */
 .tarjeta {
   position: relative;
@@ -720,10 +705,59 @@ html:not(.js) .paso::after {
 
 /* ---------- Logos, etiquetas y cinta ---------- */
 .logo {
-  width: 1em;
-  height: 1em;
+  display: block;
   flex-shrink: 0;
-  fill: currentColor;
+}
+
+/* Logos negros o muy oscuros: en modo oscuro se aclaran sin perder el tono. */
+:root:not([data-tema="claro"]) .logo-oscuro {
+  filter: invert(1) hue-rotate(180deg);
+}
+
+/* Cada tecnología en su propia pieza: logo a color y nombre debajo. */
+.tecnologia {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  min-height: 7.5rem;
+  padding: 1rem 0.5rem;
+  border: 1px solid var(--linea);
+  border-radius: var(--radius-base);
+  background: color-mix(in oklab, var(--fondo) 55%, var(--superficie));
+  font-size: var(--text-etiqueta);
+  font-weight: 500;
+  line-height: 1.25;
+  text-align: center;
+  transition:
+    border-color var(--duracion-media) var(--ease-salida),
+    background-color var(--duracion-media) var(--ease-salida),
+    transform var(--duracion-ui) var(--ease-salida);
+}
+
+.tecnologia-logo {
+  width: 2.75rem;
+  height: 2.75rem;
+  transition: transform var(--duracion-media) var(--ease-salida);
+}
+
+@media (min-width: 768px) {
+  .tecnologia {
+    font-size: var(--text-pequeno);
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .tecnologia:hover {
+    border-color: var(--linea-fuerte);
+    background: var(--superficie-alta);
+    transform: translate3d(0, -2px, 0);
+  }
+
+  .tecnologia:hover .tecnologia-logo {
+    transform: scale(1.08);
+  }
 }
 
 .etiqueta {
@@ -737,11 +771,6 @@ html:not(.js) .paso::after {
   font-family: var(--font-mono);
   font-size: var(--text-etiqueta);
   line-height: 1.3;
-}
-
-.etiqueta-aprendiendo {
-  border-style: dashed;
-  color: var(--texto-suave);
 }
 
 .cinta {
@@ -759,12 +788,6 @@ html:not(.js) .paso::after {
 @keyframes desplazar {
   to {
     transform: translate3d(-50%, 0, 0);
-  }
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .cinta:hover .cinta-pista {
-    animation-play-state: paused;
   }
 }
 
@@ -859,6 +882,10 @@ html:not(.js) .paso::after {
     animation: letra-entra 760ms var(--ease-salida) calc(120ms + var(--i, 0) * 35ms) backwards;
   }
 
+  html.js [data-aparece].visible .tecnologia {
+    animation: aparecer 560ms var(--ease-salida) calc(var(--retraso, 0ms) + 180ms + var(--j, 0) * 45ms) backwards;
+  }
+
   .demo-orden[data-estado="listo"] .barra-orden {
     animation: barrido 520ms var(--ease-salida) calc(var(--i, 0) * 22ms);
   }
@@ -900,6 +927,8 @@ html:not(.js) .paso::after {
   .tarjeta,
   .nucleo::before,
   .paso-icono,
+  .tecnologia,
+  .tecnologia-logo,
   .flecha,
   .fila-contacto .flecha {
     transition-property: border-color, background-color, color, opacity;

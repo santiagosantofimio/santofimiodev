@@ -1,5 +1,4 @@
 ---
-import { HandPointingIcon } from "@phosphor-icons/react/ssr";
 import Boton from "@/componentes/Boton.astro";
 import { perfil } from "@/datos/perfil";
 
@@ -18,14 +17,7 @@ const lineas = [nombre, apellido].map((palabra) => [...palabra].map((letra) => (
   <div
     class="mx-auto flex max-w-[1400px] flex-col px-margen pt-10 pb-20 md:pt-16 lg:min-h-[calc(100svh-4rem)] lg:justify-center lg:pb-24"
   >
-    <div class="entrada flex flex-wrap items-center justify-between gap-x-6 gap-y-2" style="--retraso: 60ms">
-      <p class="font-mono text-etiqueta text-texto-suave">{perfil.busqueda}</p>
-      <p class="hidden items-center gap-2 font-mono text-etiqueta text-texto-suave sm:flex" aria-hidden="true">
-        <HandPointingIcon size={16} />
-        <span class="pista-mouse">Pasa el mouse por el nombre</span>
-        <span class="pista-tactil">Toca el nombre</span>
-      </p>
-    </div>
+    <p class="entrada font-mono text-etiqueta text-texto-suave" style="--retraso: 60ms">{perfil.busqueda}</p>
 
     <h1 id="titulo-inicio" class="mt-6 text-nombre select-none" data-nombre>
       <span class="sr-only">{perfil.nombre}</span>
@@ -47,7 +39,7 @@ const lineas = [nombre, apellido].map((palabra) => [...palabra].map((letra) => (
     <div class="mt-10 grid gap-8 md:mt-14 md:grid-cols-12 md:items-end">
       <p class="entrada max-w-[36ch] text-entrada text-texto-suave md:col-span-6" style="--retraso: 700ms">
         {perfil.oficio} en {perfil.ciudad}. Hago interfaces rápidas y accesibles con Astro, React y TypeScript, y
-        backend con Java.
+        backend con Java y Spring Boot.
       </p>
       <div
         class="entrada grid gap-3 sm:flex sm:flex-wrap md:col-span-6 md:justify-end"
