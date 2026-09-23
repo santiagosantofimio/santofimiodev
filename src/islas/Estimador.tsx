@@ -1,10 +1,37 @@
 import { useRef, useState } from "react";
-import { ArrowCounterClockwiseIcon, CheckIcon, WhatsappLogoIcon } from "@phosphor-icons/react";
+import {
+  ArrowCounterClockwiseIcon,
+  ArrowsClockwiseIcon,
+  BrowserIcon,
+  BrowsersIcon,
+  CheckIcon,
+  DotsThreeIcon,
+  ForkKnifeIcon,
+  ScissorsIcon,
+  StethoscopeIcon,
+  StorefrontIcon,
+  WhatsappLogoIcon,
+  WrenchIcon,
+  type Icon,
+} from "@phosphor-icons/react";
 import { avisoEstimado, mantenimiento, preguntas, type Opcion, type Pregunta } from "@/datos/estimador";
 import { formatoPesos, formatoSemanas } from "@/lib/formato";
 import { enlaceWhatsApp, TEXTO_CTA_WHATSAPP } from "@/lib/whatsapp";
 
 type Respuestas = Partial<Record<Pregunta["id"], string>>;
+
+// Solo las dos primeras preguntas llevan icono: ayudan a reconocer la opción de un vistazo.
+const iconos: Record<string, Icon> = {
+  "una-pagina": BrowserIcon,
+  "varias-secciones": BrowsersIcon,
+  rediseno: ArrowsClockwiseIcon,
+  belleza: ScissorsIcon,
+  comida: ForkKnifeIcon,
+  salud: StethoscopeIcon,
+  tienda: StorefrontIcon,
+  taller: WrenchIcon,
+  otro: DotsThreeIcon,
+};
 
 function elegida(pregunta: Pregunta, respuestas: Respuestas): Opcion | undefined {
   return pregunta.opciones.find((opcion) => opcion.id === respuestas[pregunta.id]);
@@ -56,25 +83,37 @@ export default function Estimador() {
   return (
     <div className="grid grid-cols-12 gap-x-6 gap-y-12">
       <div className="col-span-12 lg:col-span-7">
-        <form ref={formulario} className="flex flex-col gap-10" onSubmit={(evento) => evento.preventDefault()}>
+        <form
+          ref={formulario}
+          className="flex flex-col gap-10"
+          onSubmit={(evento) => evento.preventDefault()}
+        >
           {preguntas.map((pregunta) => (
             <fieldset key={pregunta.id}>
               <legend className="font-display text-titulo-3 font-bold">{pregunta.pregunta}</legend>
               <div className="mt-4 grid gap-2 sm:grid-cols-2">
-                {pregunta.opciones.map((opcion) => (
-                  <label key={opcion.id} className="opcion">
-                    <input
-                      type="radio"
-                      name={pregunta.id}
-                      value={opcion.id}
-                      checked={respuestas[pregunta.id] === opcion.id}
-                      onChange={() => responder(pregunta.id, opcion.id)}
-                      className="sr-only"
-                    />
-                    <span>{opcion.etiqueta}</span>
-                    <CheckIcon size={18} weight="bold" aria-hidden className="opcion-marca" />
-                  </label>
-                ))}
+                {pregunta.opciones.map((opcion) => {
+                  const Icono = iconos[opcion.id];
+                  return (
+                    <label key={opcion.id} className="opcion">
+                      <input
+                        type="radio"
+                        name={pregunta.id}
+                        value={opcion.id}
+                        checked={respuestas[pregunta.id] === opcion.id}
+                        onChange={() => responder(pregunta.id, opcion.id)}
+                        className="sr-only"
+                      />
+                      <span className="flex items-center gap-3">
+                        {Icono && (
+                          <Icono size={20} weight="bold" aria-hidden className="shrink-0 text-texto-suave" />
+                        )}
+                        {opcion.etiqueta}
+                      </span>
+                      <CheckIcon size={18} weight="bold" aria-hidden className="opcion-marca" />
+                    </label>
+                  );
+                })}
               </div>
             </fieldset>
           ))}
@@ -86,7 +125,10 @@ export default function Estimador() {
               {formatoPesos(precio.desde)} <span className="font-normal text-texto-suave">a</span>{" "}
               {formatoPesos(precio.hasta)}
             </p>
-            <a href="#resumen" className="enlace inline-flex min-h-11 items-center text-pequeno whitespace-nowrap">
+            <a
+              href="#resumen"
+              className="enlace inline-flex min-h-11 items-center text-pequeno whitespace-nowrap"
+            >
               Ver resumen
             </a>
           </div>
@@ -103,14 +145,19 @@ export default function Estimador() {
           <div aria-live="polite" className="mt-4">
             {precio && semanas ? (
               <>
-                <p className="font-display text-titulo-2 font-extrabold">
+                <p
+                  key={`${precio.desde}-${precio.hasta}`}
+                  className="cambio font-display text-titulo-2 font-extrabold"
+                >
                   <span className="block">{formatoPesos(precio.desde)}</span>
                   <span className="block">
                     <span className="font-bold text-texto-suave">a </span>
                     {formatoPesos(precio.hasta)}
                   </span>
                 </p>
-                <p className="mt-4 text-entrada">Entrega en {formatoSemanas(semanas)}.</p>
+                <p key={formatoSemanas(semanas)} className="cambio mt-4 text-entrada">
+                  Entrega en {formatoSemanas(semanas)}.
+                </p>
               </>
             ) : (
               <p className="max-w-[24ch] font-display text-titulo-3 font-bold text-texto-suave">

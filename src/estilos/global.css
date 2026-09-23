@@ -7,26 +7,28 @@
 */
 :root {
   color-scheme: dark;
-  --fondo: #15120f;
-  --superficie: #1f1b17;
-  --texto: #f1e9da;
-  --texto-suave: #b3a894;
-  --linea: #2e2822;
-  --linea-fuerte: #756a5c;
-  --acento: #ff5a36;
-  --sobre-acento: #15120f;
+  --fondo: #111214;
+  --superficie: #191a1d;
+  --superficie-alta: #222327;
+  --texto: #ececee;
+  --texto-suave: #9c9ea5;
+  --linea: #26272b;
+  --linea-fuerte: #6a6c74;
+  --acento: #d9dade;
+  --sobre-acento: #111214;
 }
 
 :root[data-tema="claro"] {
   color-scheme: light;
-  --fondo: #f0eee9;
-  --superficie: #e7e4dd;
-  --texto: #1a1612;
-  --texto-suave: #5d554b;
-  --linea: #d9d5cc;
-  --linea-fuerte: #857c71;
-  --acento: #bb2c13;
-  --sobre-acento: #fbfaf7;
+  --fondo: #e9eaec;
+  --superficie: #dfe0e3;
+  --superficie-alta: #d4d5d9;
+  --texto: #151618;
+  --texto-suave: #54565c;
+  --linea: #cdced3;
+  --linea-fuerte: #7a7d85;
+  --acento: #26272b;
+  --sobre-acento: #eeeff1;
 }
 
 @theme {
@@ -56,6 +58,9 @@
   --text-titulo-1: clamp(2.75rem, 1.2rem + 5.2vw, 5.75rem);
   --text-titulo-1--line-height: 0.98;
   --text-titulo-1--letter-spacing: -0.045em;
+  --text-titulo-hero: clamp(2.625rem, 1.5rem + 3.3vw, 4.125rem);
+  --text-titulo-hero--line-height: 1;
+  --text-titulo-hero--letter-spacing: -0.045em;
 
   /* Esquinas: un solo radio para todo lo que tiene borde. Sin píldoras. */
   --radius-base: 0.5rem;
@@ -75,6 +80,7 @@
 @theme inline {
   --color-fondo: var(--fondo);
   --color-superficie: var(--superficie);
+  --color-superficie-alta: var(--superficie-alta);
   --color-texto: var(--texto);
   --color-texto-suave: var(--texto-suave);
   --color-linea: var(--linea);
@@ -425,6 +431,347 @@ html.cambiando-tema * {
 
 @media (prefers-reduced-motion: reduce) {
   .flecha {
+    transition: none;
+  }
+}
+
+/* ---------- Hero: titular palabra por palabra ---------- */
+.palabra {
+  display: inline-block;
+}
+
+@keyframes palabra {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 0.35em, 0);
+    filter: blur(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: blur(0);
+  }
+}
+
+/* ---------- Hero: la pantalla que se arma sola ---------- */
+.pantalla {
+  aspect-ratio: 9 / 17;
+  border: 1px solid var(--linea-fuerte);
+  border-radius: var(--radius-base);
+  background: var(--fondo);
+  box-shadow: 0 1.5rem 4rem -1.5rem color-mix(in oklab, black 55%, transparent);
+}
+
+.bloque {
+  border: 1px solid var(--linea);
+  border-radius: calc(var(--radius-base) - 2px);
+  background: var(--superficie);
+}
+
+.barra {
+  display: block;
+  height: 0.5rem;
+  border-radius: 2px;
+  background: var(--linea-fuerte);
+  opacity: 0.55;
+}
+
+.nota {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.625rem 0.875rem;
+  border: 1px solid var(--linea);
+  border-radius: var(--radius-base);
+  background: var(--superficie);
+  color: var(--texto-suave);
+  font-size: var(--text-pequeno);
+  line-height: 1.3;
+}
+
+@keyframes armar {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 0.75rem, 0) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Un paso de la explicación a la vez: el bloque y su nota se iluminan juntos. */
+@keyframes resaltar-bloque {
+  0%,
+  25%,
+  100% {
+    border-color: var(--linea);
+    background-color: var(--superficie);
+  }
+  3%,
+  22% {
+    border-color: var(--texto-suave);
+    background-color: var(--superficie-alta);
+  }
+}
+
+@keyframes resaltar-nota {
+  0%,
+  25%,
+  100% {
+    border-color: var(--linea);
+    color: var(--texto-suave);
+  }
+  3%,
+  22% {
+    border-color: var(--linea-fuerte);
+    color: var(--texto);
+  }
+}
+
+/* ---------- Tarjetas con brillo al pasar el mouse ---------- */
+.tarjeta {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border: 1px solid var(--linea);
+  border-radius: var(--radius-base);
+  background: var(--superficie);
+  transition:
+    border-color var(--duracion-media) var(--ease-salida),
+    transform var(--duracion-ui) var(--ease-salida);
+}
+
+.tarjeta::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(
+    26rem circle at var(--luz-x, 50%) var(--luz-y, 0%),
+    color-mix(in oklab, var(--texto) 9%, transparent),
+    transparent 60%
+  );
+  opacity: 0;
+  transition: opacity var(--duracion-media) var(--ease-salida);
+}
+
+.tarjeta-invertida {
+  border-color: var(--acento);
+  background: var(--acento);
+  color: var(--sobre-acento);
+}
+
+.tarjeta-invertida::before {
+  background: radial-gradient(
+    26rem circle at var(--luz-x, 50%) var(--luz-y, 0%),
+    color-mix(in oklab, var(--sobre-acento) 10%, transparent),
+    transparent 60%
+  );
+}
+
+.icono-tarjeta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  border: 1px solid var(--linea-fuerte);
+  border-radius: var(--radius-base);
+  color: var(--texto);
+}
+
+.tarjeta-invertida .texto-secundario {
+  color: color-mix(in oklab, var(--sobre-acento) 72%, var(--acento));
+}
+
+.tarjeta-invertida .icono-tarjeta {
+  border-color: color-mix(in oklab, var(--sobre-acento) 35%, transparent);
+  color: var(--sobre-acento);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .tarjeta:hover {
+    border-color: var(--linea-fuerte);
+    transform: translate3d(0, -3px, 0);
+  }
+
+  .tarjeta-invertida:hover {
+    border-color: var(--acento);
+  }
+
+  .tarjeta:hover::before {
+    opacity: 1;
+  }
+}
+
+/* ---------- Cómo trabajo: pasos que se encienden y la línea que los une ---------- */
+.paso {
+  position: relative;
+}
+
+.paso-icono {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  border: 1px solid var(--linea-fuerte);
+  border-radius: var(--radius-base);
+  background: var(--fondo);
+  color: var(--texto-suave);
+  transition:
+    background-color var(--duracion-media) var(--ease-salida),
+    border-color var(--duracion-media) var(--ease-salida),
+    color var(--duracion-media) var(--ease-salida);
+}
+
+.paso[data-activo="true"] .paso-icono,
+html:not(.js) .paso-icono {
+  border-color: var(--acento);
+  background: var(--acento);
+  color: var(--sobre-acento);
+}
+
+/* El tramo sale de cada paso hacia el siguiente: vertical en celular, horizontal desde lg. */
+.paso:not(:last-child)::before,
+.paso:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  top: 3.5rem;
+  bottom: -1.75rem;
+  left: 1.5rem;
+  width: 1px;
+  background: var(--linea);
+}
+
+.paso:not(:last-child)::after {
+  background: var(--acento);
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform var(--duracion-larga) var(--ease-salida);
+}
+
+.paso:has(+ .paso[data-activo="true"])::after,
+html:not(.js) .paso::after {
+  transform: none;
+}
+
+@media (min-width: 1024px) {
+  .paso:not(:last-child)::before,
+  .paso:not(:last-child)::after {
+    top: 1.5rem;
+    bottom: auto;
+    left: 3.5rem;
+    right: -1.5rem;
+    width: auto;
+    height: 1px;
+  }
+
+  .paso:not(:last-child)::after {
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+}
+
+/* ---------- Logos y cinta del stack ---------- */
+.logo {
+  width: 1em;
+  height: 1em;
+  flex-shrink: 0;
+  fill: currentColor;
+}
+
+.cinta {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+  mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+}
+
+.cinta-pista {
+  display: flex;
+  width: max-content;
+  animation: desplazar 48s linear infinite;
+}
+
+@keyframes desplazar {
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .cinta:hover .cinta-pista {
+    animation-play-state: paused;
+  }
+}
+
+/* ---------- Estimador: el rango cambia con un fundido corto ---------- */
+@keyframes cambiar {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 0.25rem, 0);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: blur(0);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .palabra {
+    animation: palabra 640ms var(--ease-salida) calc(var(--i, 0) * 45ms) both;
+  }
+
+  .pantalla-armado {
+    animation: armar 620ms var(--ease-salida) calc(500ms + var(--paso, 0) * 200ms) both;
+  }
+
+  .bloque[data-resalta] {
+    animation:
+      armar 620ms var(--ease-salida) calc(500ms + var(--paso, 0) * 200ms) both,
+      resaltar-bloque 10s linear calc(2.2s + var(--turno, 0) * 2.5s) infinite;
+  }
+
+  .nota {
+    animation:
+      armar 620ms var(--ease-salida) calc(600ms + var(--paso, 0) * 200ms) both,
+      resaltar-nota 10s linear calc(2.2s + var(--turno, 0) * 2.5s) infinite;
+  }
+
+  .cambio {
+    animation: cambiar 260ms var(--ease-salida) both;
+  }
+
+  html.js [data-pausable]:not(.en-pantalla) *,
+  html.js [data-pausable]:not(.en-pantalla) {
+    animation-play-state: paused;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cinta-pista {
+    flex-wrap: wrap;
+    width: auto;
+    animation: none;
+  }
+
+  .cinta-copia {
+    display: none;
+  }
+
+  .tarjeta,
+  .tarjeta::before,
+  .paso-icono,
+  .flecha {
+    transition-property: border-color, background-color, color, opacity;
+  }
+
+  .paso:not(:last-child)::after {
     transition: none;
   }
 }

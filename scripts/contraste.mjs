@@ -30,8 +30,10 @@ function razon(a, b) {
 const pares = [
   ["texto", "fondo", 4.5],
   ["texto", "superficie", 4.5],
+  ["texto", "superficie-alta", 4.5],
   ["texto-suave", "fondo", 4.5],
   ["texto-suave", "superficie", 4.5],
+  ["texto-suave", "superficie-alta", 4.5],
   ["acento", "fondo", 4.5],
   ["acento", "superficie", 4.5],
   ["sobre-acento", "acento", 4.5],
@@ -53,7 +55,7 @@ for (const [modo, tokens] of Object.entries(modos)) {
     const pasa = valor >= minimo;
     if (!pasa) fallas++;
     const marca = pasa ? "ok   " : "FALLA";
-    console.log(`  ${marca} ${texto.padEnd(13)} sobre ${fondo.padEnd(11)} ${valor.toFixed(2)}:1 (mín. ${minimo})`);
+    console.log(`  ${marca} ${texto.padEnd(13)} sobre ${fondo.padEnd(15)} ${valor.toFixed(2)}:1 (mín. ${minimo})`);
   }
 }
 

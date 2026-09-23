@@ -1,5 +1,12 @@
 ---
+import { ClockIcon, MapPinIcon, SignatureIcon } from "@phosphor-icons/react/ssr";
 import { perfil } from "@/datos/perfil";
+
+const datos = [
+  { Icono: MapPinIcon, texto: `${perfil.ciudad}, Colombia` },
+  { Icono: ClockIcon, texto: perfil.respuesta.replace(/\.$/, "") },
+  { Icono: SignatureIcon, texto: "Precio cerrado antes de empezar" },
+];
 ---
 
 <section aria-labelledby="titulo-sobre-mi" class="py-seccion">
@@ -16,6 +23,16 @@ import { perfil } from "@/datos/perfil";
           tienen buen producto y todavía no tienen dónde mostrarlo en internet.
         </p>
       </div>
+      <ul class="mt-10 flex flex-col gap-3 border-t border-linea pt-8 sm:flex-row sm:flex-wrap sm:gap-x-8">
+        {
+          datos.map(({ Icono, texto }) => (
+            <li class="flex items-center gap-3 text-pequeno text-texto-suave">
+              <Icono size={20} weight="bold" aria-hidden="true" className="text-texto" />
+              {texto}
+            </li>
+          ))
+        }
+      </ul>
     </div>
   </div>
 </section>

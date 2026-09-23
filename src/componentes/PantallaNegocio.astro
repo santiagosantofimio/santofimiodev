@@ -1,0 +1,86 @@
+---
+import {
+  ClockIcon,
+  ListIcon,
+  MapPinIcon,
+  StorefrontIcon,
+  TagIcon,
+  WhatsappLogoIcon,
+} from "@phosphor-icons/react/ssr";
+
+// Cada nota explica un bloque de la pantalla; `turno` es el orden en que se iluminan.
+// Desde xl las notas salen de los bordes de la pantalla, montadas solo un poco sobre ella.
+const notas = [
+  { texto: "Qué ofreces, apenas abren tu página", Icono: StorefrontIcon, lugar: "xl:right-[calc(100%-3.5rem)] xl:top-[14%]" },
+  { texto: "Servicios y precios claros", Icono: TagIcon, lugar: "xl:left-[calc(100%-3.5rem)] xl:top-[36%]" },
+  { texto: "Horario y cómo llegar", Icono: MapPinIcon, lugar: "xl:right-[calc(100%-3.5rem)] xl:top-[58%]" },
+  { texto: "Un botón directo a tu WhatsApp", Icono: WhatsappLogoIcon, lugar: "xl:left-[calc(100%-3.5rem)] xl:top-[91%]" },
+];
+---
+
+<div class="relative mx-auto w-full max-w-[17.5rem] lg:max-w-[18rem]" data-pausable>
+  <div aria-hidden="true" class="pantalla pantalla-armado relative flex flex-col gap-2 p-3" style="--paso: 0">
+    <div class="flex items-center justify-between px-1 py-1.5">
+      <span class="flex items-center gap-2">
+        <span class="size-5 rounded-[3px] bg-linea-fuerte"></span>
+        <span class="font-display text-[0.8125rem] font-bold">Tu negocio</span>
+      </span>
+      <ListIcon size={16} weight="bold" className="text-texto-suave" />
+    </div>
+
+    <div class="bloque flex flex-col gap-2 p-3" data-resalta style="--paso: 1; --turno: 0">
+      <span class="barra h-3 w-5/6 opacity-90"></span>
+      <span class="barra h-3 w-3/5 opacity-90"></span>
+      <span class="barra mt-1 w-full"></span>
+      <span class="barra w-4/5"></span>
+      <span class="mt-2 block h-6 w-24 rounded-[3px] bg-texto-suave"></span>
+    </div>
+
+    <div class="bloque flex flex-col gap-2.5 p-3" data-resalta style="--paso: 2; --turno: 1">
+      {
+        [0, 1, 2].map(() => (
+          <span class="flex items-center justify-between gap-3">
+            <span class="barra w-1/2" />
+            <span class="barra w-1/5 opacity-90" />
+          </span>
+        ))
+      }
+    </div>
+
+    <div class="bloque flex flex-1 flex-col gap-2 p-3" data-resalta style="--paso: 3; --turno: 2">
+      <span class="flex items-center gap-2 text-texto-suave">
+        <ClockIcon size={14} weight="bold" />
+        <span class="barra w-2/3"></span>
+      </span>
+      <span class="flex items-center gap-2 text-texto-suave">
+        <MapPinIcon size={14} weight="bold" />
+        <span class="barra w-1/2"></span>
+      </span>
+      <span
+        class="mt-1 block min-h-12 flex-1 rounded-[3px] border border-linea bg-[repeating-linear-gradient(135deg,var(--linea)_0_1px,transparent_1px_10px)]"
+      ></span>
+    </div>
+
+    <div
+      class="bloque absolute right-4 bottom-4 flex size-11 items-center justify-center text-texto"
+      data-resalta
+      style="--paso: 4; --turno: 3"
+    >
+      <WhatsappLogoIcon size={22} weight="bold" />
+    </div>
+  </div>
+
+  <ul
+    aria-label="Lo que lleva la página de tu negocio"
+    class="relative left-1/2 mt-6 grid w-[22rem] max-w-[calc(100vw-2.5rem)] -translate-x-1/2 grid-cols-2 gap-2 xl:static xl:mt-0 xl:block xl:w-auto xl:max-w-none xl:translate-none"
+  >
+    {
+      notas.map(({ texto, Icono, lugar }, indice) => (
+        <li class:list={["nota xl:absolute xl:w-max xl:max-w-[11rem]", lugar]} style={`--paso: ${indice + 1}; --turno: ${indice}`}>
+          <Icono size={18} weight="bold" aria-hidden="true" className="shrink-0" />
+          <span>{texto}</span>
+        </li>
+      ))
+    }
+  </ul>
+</div>

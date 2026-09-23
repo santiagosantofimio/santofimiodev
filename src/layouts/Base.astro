@@ -36,7 +36,7 @@ const persona = {
     <title>{titulo}</title>
     <meta name="description" content={descripcion} />
     <link rel="canonical" href={url} />
-    <meta name="theme-color" content="#15120f" />
+    <meta name="theme-color" content="#111214" />
     <link rel="preload" href={fuenteDisplay} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={fuenteCuerpo} as="font" type="font/woff2" crossorigin />
 
@@ -69,7 +69,7 @@ const persona = {
         try {
           if (localStorage.getItem("tema") === "claro") {
             html.dataset.tema = "claro";
-            document.querySelector('meta[name="theme-color"]')?.setAttribute("content", "#f0eee9");
+            document.querySelector('meta[name="theme-color"]')?.setAttribute("content", "#e9eaec");
           }
         } catch {
           // Sin almacenamiento disponible se queda el modo oscuro.
@@ -89,9 +89,15 @@ const persona = {
     <script>
       import { iniciarApariciones } from "@/lib/apariciones";
       import { iniciarDesplazamiento } from "@/lib/desplazamiento";
+      import { iniciarLuz } from "@/lib/luz";
+      import { iniciarPausables } from "@/lib/pausables";
+      import { iniciarProceso } from "@/lib/proceso";
 
       iniciarApariciones();
       iniciarDesplazamiento();
+      iniciarLuz();
+      iniciarPausables();
+      iniciarProceso();
     </script>
   </body>
 </html>
