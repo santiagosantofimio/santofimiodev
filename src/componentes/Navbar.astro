@@ -1,0 +1,66 @@
+---
+import AlternarTema from "@/islas/AlternarTema";
+import MenuCelular from "@/islas/MenuCelular";
+import Boton from "@/componentes/Boton.astro";
+import { perfil } from "@/datos/perfil";
+import { enlaceWhatsApp, TEXTO_CTA_WHATSAPP } from "@/lib/whatsapp";
+
+const enlaces = [
+  { href: "#servicios", texto: "Qué hago" },
+  { href: "#proceso", texto: "Cómo trabajo" },
+  { href: "#presupuesto", texto: "Precios" },
+  { href: "#contacto", texto: "Contacto" },
+];
+
+const whatsapp = enlaceWhatsApp("general");
+---
+
+<header data-navbar class="sticky top-0 z-30 h-16">
+  <div aria-hidden="true" class="navbar-fondo absolute inset-0 border-b border-linea bg-fondo"></div>
+  <div
+    class="navbar-contenido relative mx-auto flex h-full max-w-[1400px] items-center justify-between gap-6 px-margen"
+  >
+    <a href="#inicio" class="font-display text-[1.0625rem] font-bold tracking-[-0.02em]">
+      {perfil.nombre}
+    </a>
+
+    <nav aria-label="Principal" class="hidden lg:block">
+      <ul class="flex items-center gap-8">
+        {
+          enlaces.map((enlace) => (
+            <li>
+              <a
+                href={enlace.href}
+                class="text-pequeno text-texto-suave transition-[color] duration-(--duracion-media) ease-salida hover:text-texto"
+              >
+                {enlace.texto}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="flex items-center gap-2">
+      <AlternarTema client:idle />
+      <Boton href={whatsapp} icono="whatsapp" compacto class="hidden lg:inline-flex">
+        {TEXTO_CTA_WHATSAPP}
+      </Boton>
+      <div class="lg:hidden">
+        <MenuCelular client:media="(max-width: 1023px)" enlaces={enlaces} whatsapp={whatsapp} textoWhatsapp={TEXTO_CTA_WHATSAPP} />
+      </div>
+    </div>
+  </div>
+</header>
+
+<script>
+  // Compacta la navbar cuando el centinela del tope sale de la pantalla.
+  const navbar = document.querySelector<HTMLElement>("[data-navbar]");
+  const centinela = document.querySelector("[data-centinela]");
+
+  if (navbar && centinela) {
+    new IntersectionObserver(([entrada]) => {
+      navbar.dataset.compacto = String(!entrada.isIntersecting);
+    }).observe(centinela);
+  }
+</script>

@@ -1,0 +1,24 @@
+---
+import Boton from "@/componentes/Boton.astro";
+import { enlaceWhatsApp, TEXTO_CTA_WHATSAPP } from "@/lib/whatsapp";
+---
+
+<section id="inicio" tabindex="-1" aria-labelledby="titulo-inicio" class="relative">
+  <div
+    class="mx-auto grid min-h-[calc(100svh-4rem)] max-w-[1400px] grid-cols-12 content-between gap-y-10 px-margen pt-12 pb-14 md:min-h-0 md:content-start md:gap-y-16 md:pt-20 md:pb-8 lg:gap-y-20"
+  >
+    <h1 id="titulo-inicio" class="col-span-12 text-titulo-1 font-extrabold">
+      Hago la página web de tu negocio en Bogotá<span class="text-acento">.</span>
+    </h1>
+
+    <div class="col-span-12 md:col-span-7 md:col-start-6 lg:col-span-5 lg:col-start-7">
+      <p class="entrada max-w-[34ch] text-entrada text-texto-suave" style="--retraso: 120ms">
+        Se ve bien en el celular y sabes cuánto cuesta antes de que empiece a construirla.
+      </p>
+      <div class="entrada mt-8 grid gap-3 sm:flex sm:flex-wrap" style="--retraso: 220ms">
+        <Boton href={enlaceWhatsApp("general")} icono="whatsapp">{TEXTO_CTA_WHATSAPP}</Boton>
+        <Boton href="#presupuesto" variante="secundario" icono="abajo">Calcula el precio</Boton>
+      </div>
+    </div>
+  </div>
+</section>

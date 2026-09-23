@@ -1,0 +1,36 @@
+---
+import { servicios } from "@/datos/servicios";
+---
+
+<section id="servicios" tabindex="-1" aria-labelledby="titulo-servicios" class="scroll-mt-16 py-seccion">
+  <div class="mx-auto grid max-w-[1400px] grid-cols-12 gap-x-6 gap-y-12 px-margen">
+    <div class="col-span-12 lg:col-span-4">
+      <div class="lg:sticky lg:top-28" data-aparece>
+        <h2 id="titulo-servicios" class="text-titulo-2 font-extrabold">Qué hago</h2>
+        <p class="mt-5 max-w-[30ch] text-texto-suave">
+          Cuatro tipos de encargo. Si lo tuyo no encaja en ninguno, escríbeme igual y lo miramos.
+        </p>
+      </div>
+    </div>
+
+    <ul class="col-span-12 lg:col-span-8">
+      {
+        servicios.map((servicio, indice) => (
+          <li
+            data-aparece
+            style={`--retraso: ${indice * 70}ms`}
+            class="grid gap-x-8 gap-y-3 border-t border-linea py-8 md:grid-cols-8 md:py-10"
+          >
+            <p class="max-w-[30ch] font-mono text-etiqueta text-texto-suave md:col-span-3 md:pt-2.5">
+              {servicio.paraQuien}
+            </p>
+            <div class="md:col-span-5">
+              <h3 class="text-titulo-3 font-bold">{servicio.nombre}</h3>
+              <p class="mt-3 max-w-[52ch] text-texto-suave">{servicio.incluye}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

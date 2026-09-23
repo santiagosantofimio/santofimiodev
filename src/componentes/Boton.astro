@@ -1,0 +1,25 @@
+---
+import { ArrowDownIcon, WhatsappLogoIcon } from "@phosphor-icons/react/ssr";
+
+interface Props {
+  href: string;
+  variante?: "primario" | "secundario";
+  icono?: "whatsapp" | "abajo";
+  compacto?: boolean;
+  class?: string;
+}
+
+const { href, variante = "primario", icono, compacto = false, class: clase } = Astro.props;
+const externo = href.startsWith("http");
+---
+
+<a
+  href={href}
+  class:list={["boton", `boton-${variante}`, compacto && "boton-compacto", clase]}
+  target={externo ? "_blank" : undefined}
+  rel={externo ? "noopener" : undefined}
+>
+  {icono === "whatsapp" && <WhatsappLogoIcon size={20} weight="bold" aria-hidden="true" />}
+  <slot />
+  {icono === "abajo" && <ArrowDownIcon size={18} weight="bold" aria-hidden="true" />}
+</a>

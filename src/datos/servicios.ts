@@ -8,7 +8,7 @@ export interface Servicio {
 export const servicios: Servicio[] = [
   {
     id: "una-pagina",
-    nombre: "Página de una sola hoja para tu negocio",
+    nombre: "Sitio de una página para tu negocio",
     paraQuien: "Para el negocio que todavía no tiene página.",
     incluye:
       "Qué ofreces, precios, horario, cómo llegar con mapa y un botón que abre WhatsApp. Todo en una página que se lee bien en el celular.",
