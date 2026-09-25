@@ -3,10 +3,9 @@ import type { Idioma } from "@/i18n/idiomas";
 // Los textos de la interfaz. El contenido largo vive en src/datos/, con sus dos idiomas al lado.
 const es = {
   pagina: {
-    titulo: "Santiago Santofimio, desarrollador web en Bogotá",
-    descripcion:
-      "Desarrollador web en Bogotá. Interfaces rápidas y accesibles con Astro, React y TypeScript, y backend con Java y Spring Boot. Busco trabajo en un equipo de desarrollo.",
-    imagenAlt: "Santiago Santofimio, desarrollador web en Bogotá.",
+    titulo: "Santiago Santofimio · Software Developer",
+    descripcion: "Portafolio de Santiago Santofimio: proyectos, tecnologías y contacto.",
+    imagenAlt: "Santiago Santofimio, Software Developer.",
     imagen: "/og.png",
     saltar: "Saltar al contenido",
   },
@@ -78,11 +77,10 @@ export type Textos = typeof es;
 
 const en: Textos = {
   pagina: {
-    titulo: "Santiago Santofimio, software developer in Bogotá",
-    descripcion:
-      "Software developer in Bogotá. Fast, accessible interfaces with Astro, React and TypeScript, and backends with Java and Spring Boot. Looking for a job on a development team.",
-    imagenAlt: "Santiago Santofimio, software developer in Bogotá.",
-    imagen: "/og-en.png",
+    titulo: "Santiago Santofimio · Software Developer",
+    descripcion: "Santiago Santofimio's portfolio: projects, tech stack and contact.",
+    imagenAlt: "Santiago Santofimio, Software Developer.",
+    imagen: "/og.png",
     saltar: "Skip to content",
   },
   navegacion: {
