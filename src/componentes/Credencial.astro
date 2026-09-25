@@ -4,6 +4,8 @@ import QRCode from "qrcode";
 import LogoMarca from "@/componentes/LogoMarca.astro";
 import { perfil } from "@/datos/perfil";
 import type { Logo } from "@/lib/logos";
+import { idiomaDe } from "@/i18n/idiomas";
+import { textos } from "@/i18n/textos";
 
 // El QR se arma al compilar y lleva a LinkedIn: sirve para escanearlo desde el celular.
 const qr = (
@@ -17,6 +19,7 @@ const qr = (
 
 const stack: Logo[] = ["java", "spring", "react", "typescript", "angular"];
 const [nombre, apellido] = perfil.nombre.split(" ");
+const idioma = idiomaDe(Astro.currentLocale);
 ---
 
 <div class="credencial-escena" data-credencial data-pausable>
@@ -31,7 +34,7 @@ const [nombre, apellido] = perfil.nombre.split(" ");
         class="credencial-tarjeta"
         data-tarjeta
         role="img"
-        aria-label={`Credencial de ${perfil.nombre}, ${perfil.rol} en ${perfil.ciudad}, con un código QR que abre su LinkedIn.`}
+        aria-label={textos[idioma].hero.credencial(perfil.nombre, perfil.rol, perfil.ciudad)}
       >
         <div class="credencial-ranura" aria-hidden="true"></div>
 
@@ -53,7 +56,7 @@ const [nombre, apellido] = perfil.nombre.split(" ");
         <p class="mt-1.5 font-display text-[0.9375rem] font-semibold text-tinta-suave">{perfil.rol}</p>
         <p class="mt-3 flex items-center gap-1.5 text-[0.8125rem] text-tinta-suave">
           <MapPinIcon size={14} aria-hidden="true" />
-          {perfil.ciudad}, Colombia
+          {perfil.ciudad}, {perfil.pais[idioma]}
         </p>
 
         <div class="mt-5 flex items-end justify-between gap-3 border-t border-[color-mix(in_oklab,var(--tinta)_14%,transparent)] pt-4">

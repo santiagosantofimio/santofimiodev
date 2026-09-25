@@ -1,5 +1,7 @@
 ---
 import { FolderSimpleIcon } from "@phosphor-icons/react/ssr";
+import { idiomaDe } from "@/i18n/idiomas";
+import { textos } from "@/i18n/textos";
 
 interface Props {
   titulo: string;
@@ -8,7 +10,8 @@ interface Props {
 
 const { titulo, parrafos } = Astro.props;
 const [primero, ...resto] = parrafos;
-const idHoja = `hoja-${titulo.toLowerCase().replace(/\W+/g, "-")}`;
+const idHoja = "hoja-sobre-mi";
+const t = textos[idiomaDe(Astro.currentLocale)].sobreMi;
 ---
 
 <div class="carpeta" data-carpeta data-abierta="false">
@@ -29,8 +32,8 @@ const idHoja = `hoja-${titulo.toLowerCase().replace(/\W+/g, "-")}`;
       {titulo}
     </span>
     <span class="font-mono text-etiqueta">
-      <span class="carpeta-accion-abrir">Abrir</span>
-      <span class="carpeta-accion-cerrar">Cerrar</span>
+      <span class="carpeta-accion-abrir">{t.abrir}</span>
+      <span class="carpeta-accion-cerrar">{t.cerrar}</span>
     </span>
   </button>
 </div>

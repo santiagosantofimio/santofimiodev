@@ -3,12 +3,17 @@ import { ArrowUpRightIcon, CheckIcon, CopyIcon } from "@phosphor-icons/react/ssr
 import Boton from "@/componentes/Boton.astro";
 import { perfil } from "@/datos/perfil";
 import { enlaceWhatsApp } from "@/lib/whatsapp";
+import { idiomaDe } from "@/i18n/idiomas";
+import { textos } from "@/i18n/textos";
+
+const idioma = idiomaDe(Astro.currentLocale);
+const t = textos[idioma];
 
 const filas = [
-  { etiqueta: "Correo", valor: perfil.correo, href: `mailto:${perfil.correo}` },
-  { etiqueta: "LinkedIn", valor: "santiagosantofimio", href: perfil.linkedin },
-  { etiqueta: "GitHub", valor: "santiagosantofimio", href: perfil.github },
-  { etiqueta: "WhatsApp", valor: perfil.whatsappVisible, href: enlaceWhatsApp() },
+  { etiqueta: t.contacto.filas.correo, valor: perfil.correo, href: `mailto:${perfil.correo}` },
+  { etiqueta: t.contacto.filas.linkedin, valor: "santiagosantofimio", href: perfil.linkedin },
+  { etiqueta: t.contacto.filas.github, valor: "santiagosantofimio", href: perfil.github },
+  { etiqueta: t.contacto.filas.whatsapp, valor: perfil.whatsappVisible, href: enlaceWhatsApp(t.contacto.saludoWhatsapp) },
 ];
 ---
 
@@ -20,21 +25,27 @@ const filas = [
 >
   <div class="mx-auto grid max-w-[1400px] grid-cols-12 gap-x-6 gap-y-14 px-margen">
     <div class="col-span-12 lg:col-span-6">
-      <h2 id="titulo-contacto" class="text-titulo-1 font-extrabold" data-aparece>Hablemos.</h2>
+      <h2 id="titulo-contacto" class="text-titulo-1 font-extrabold" data-aparece>{t.contacto.titulo}</h2>
       <p class="mt-8 max-w-[38ch] text-entrada text-texto-suave" data-aparece style="--retraso: 80ms">
-        Si tienes un puesto o un proyecto en el que pueda aportar, escríbeme. {perfil.respuesta}
+        {t.contacto.entrada} {perfil.respuesta[idioma]}
       </p>
       <div class="mt-10 grid gap-3 sm:flex sm:flex-wrap" data-aparece style="--retraso: 160ms">
-        <Boton href={`mailto:${perfil.correo}`} pieza="diagonal" magnetico>Escríbeme</Boton>
-        <button type="button" class="boton boton-secundario" data-copiar={perfil.correo} data-magnetico>
+        <Boton href={`mailto:${perfil.correo}`} pieza="diagonal" magnetico>{t.navegacion.escribeme}</Boton>
+        <button
+          type="button"
+          class="boton boton-secundario"
+          data-copiar={perfil.correo}
+          data-aviso={t.contacto.aviso}
+          data-magnetico
+        >
           <span class="copiar-texto">
             <span class="copiar-normal inline-flex items-center gap-2">
               <CopyIcon size={18} aria-hidden="true" />
-              Copiar correo
+              {t.contacto.copiar}
             </span>
             <span class="copiar-listo inline-flex items-center gap-2" aria-hidden="true">
               <CheckIcon size={18} aria-hidden="true" />
-              Copiado
+              {t.contacto.copiado}
             </span>
           </span>
         </button>

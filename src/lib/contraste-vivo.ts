@@ -18,11 +18,15 @@ function razon(a: string, b: string) {
   return (claro + 0.05) / (oscuro + 0.05);
 }
 
-const formato = new Intl.NumberFormat("es-CO", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
 export function iniciarContrasteVivo() {
   const filas = document.querySelectorAll<HTMLElement>("[data-contraste]");
   if (filas.length === 0) return;
+
+  // Números y textos en el idioma de la página: 15,89 en español, 15.89 en inglés.
+  const lang = document.documentElement.lang || "es-CO";
+  const formato = new Intl.NumberFormat(lang, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const noPasa = lang.startsWith("en") ? "Fails" : "No pasa";
 
   const actualizar = () => {
     const estilos = getComputedStyle(document.documentElement);
@@ -33,7 +37,7 @@ export function iniciarContrasteVivo() {
       if (salida) salida.textContent = `${formato.format(valor)}:1`;
       fila.dataset.nivel = valor >= 7 ? "AAA" : valor >= 4.5 ? "AA" : "no";
       const nivel = fila.querySelector("[data-nivel-texto]");
-      if (nivel) nivel.textContent = valor >= 7 ? "AAA" : valor >= 4.5 ? "AA" : "No pasa";
+      if (nivel) nivel.textContent = valor >= 7 ? "AAA" : valor >= 4.5 ? "AA" : noPasa;
     });
   };
 

@@ -1,17 +1,20 @@
 ---
 import LogoMarca from "@/componentes/LogoMarca.astro";
-import { categorias } from "@/datos/tecnologias";
+import { categorias, type Tecnologia } from "@/datos/tecnologias";
+import { idiomaDe } from "@/i18n/idiomas";
+import { textos } from "@/i18n/textos";
 
+const idioma = idiomaDe(Astro.currentLocale);
+const t = textos[idioma].tecnologias;
+const nombreDe = ({ nombre }: Tecnologia) => (typeof nombre === "string" ? nombre : nombre[idioma]);
 const todas = categorias.flatMap((categoria) => categoria.tecnologias);
 ---
 
 <section id="tecnologias" tabindex="-1" aria-labelledby="titulo-tecnologias" class="scroll-mt-16 py-seccion">
   <div class="mx-auto max-w-[1400px] px-margen">
     <div class="max-w-[40rem]" data-aparece>
-      <h2 id="titulo-tecnologias" class="text-titulo-2 font-extrabold">Tecnologías</h2>
-      <p class="mt-5 text-entrada text-texto-suave">
-        Las que he usado en proyectos propios, de la interfaz a la base de datos.
-      </p>
+      <h2 id="titulo-tecnologias" class="text-titulo-2 font-extrabold">{t.titulo}</h2>
+      <p class="mt-5 text-entrada text-texto-suave">{t.entrada}</p>
     </div>
 
     <ul class="mt-12 grid gap-4 md:mt-16 md:grid-cols-2 xl:grid-cols-3">
@@ -21,16 +24,16 @@ const todas = categorias.flatMap((categoria) => categoria.tecnologias);
             <article class="tarjeta h-full" data-luz>
               <div class="nucleo p-5 md:p-7">
                 <header class="flex flex-col gap-1.5">
-                  <h3 class="text-titulo-3 font-bold">{categoria.titulo}</h3>
+                  <h3 class="text-titulo-3 font-bold">{categoria.titulo[idioma]}</h3>
                   <p class="font-mono text-[0.75rem] tracking-[0.08em] text-texto-suave uppercase">
-                    {categoria.etiqueta}
+                    {categoria.etiqueta[idioma]}
                   </p>
                 </header>
                 <ul class="mt-6 grid grid-cols-3 gap-2 md:gap-2.5">
                   {categoria.tecnologias.map((tecnologia, j) => (
                     <li class="tecnologia" style={`--j: ${j}`}>
                       <LogoMarca logo={tecnologia.logo} tamano={44} class="tecnologia-logo" />
-                      <span>{tecnologia.nombre}</span>
+                      <span>{nombreDe(tecnologia)}</span>
                     </li>
                   ))}
                 </ul>
@@ -47,10 +50,10 @@ const todas = categorias.flatMap((categoria) => categoria.tecnologias);
       {
         [0, 1].map((copia) => (
           <ul class:list={["flex shrink-0 items-center gap-12 pr-12", copia === 1 && "cinta-copia"]}>
-            {todas.map(({ logo, nombre }) => (
+            {todas.map((tecnologia) => (
               <li class="flex items-center gap-3 font-mono text-pequeno whitespace-nowrap text-texto-suave">
-                <LogoMarca logo={logo} tamano={32} />
-                {nombre}
+                <LogoMarca logo={tecnologia.logo} tamano={32} />
+                {nombreDe(tecnologia)}
               </li>
             ))}
           </ul>

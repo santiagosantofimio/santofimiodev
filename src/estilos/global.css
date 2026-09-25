@@ -46,9 +46,10 @@
   --radius-*: initial;
   --font-*: initial;
 
-  --font-display: "Schibsted Grotesk Variable", ui-sans-serif, system-ui, sans-serif;
-  --font-cuerpo: "Geist Variable", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "JetBrains Mono Variable", ui-monospace, "SFMono-Regular", monospace;
+  /* Una sola familia con eje de ancho: ancha en los títulos, normal en el texto. */
+  --font-display: "Mona Sans Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-cuerpo: "Mona Sans Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Martian Mono Variable", ui-monospace, "SFMono-Regular", monospace;
 
   /* Escala tipográfica: fluida en los títulos, fija en lo que se lee de corrido. */
   --text-etiqueta: 0.8125rem;
@@ -68,7 +69,7 @@
   --text-titulo-1: clamp(2.75rem, 1.2rem + 5.2vw, 5.75rem);
   --text-titulo-1--line-height: 0.98;
   --text-titulo-1--letter-spacing: -0.045em;
-  --text-nombre: clamp(3.25rem, 0.5rem + 10.5vw, 10.5rem);
+  --text-nombre: clamp(3.25rem, 0.5rem + 9.5vw, 9rem);
   --text-nombre--line-height: 0.9;
   --text-nombre--letter-spacing: -0.05em;
 
@@ -81,7 +82,7 @@
   --spacing-seccion: clamp(5rem, 3.2rem + 7vw, 9.5rem);
 
   /* Movimiento: una curva para lo que entra o sale y otra para lo que se transforma en pantalla. */
-  --ease-salida: cubic-bezier(0.2, 0.85, 0.25, 1);
+  --ease-salida: cubic-bezier(0.23, 1, 0.32, 1);
   --ease-movimiento: cubic-bezier(0.77, 0, 0.175, 1);
   --duracion-corta: 160ms;
   --duracion-ui: 220ms;
@@ -147,6 +148,21 @@
     text-wrap: balance;
   }
 
+  /* Los títulos van anchos; los de tarjeta, un punto menos. */
+  h1,
+  h2 {
+    font-stretch: 125%;
+  }
+
+  h3 {
+    font-stretch: 112.5%;
+  }
+
+  /* Martian Mono es ancha de por sí: un poco más estrecha se lee mejor en etiquetas. */
+  .font-mono {
+    font-stretch: 87.5%;
+  }
+
   p {
     text-wrap: pretty;
   }
@@ -166,14 +182,25 @@ html.cambiando-tema * {
     border-color var(--duracion-media) var(--ease-salida) !important;
 }
 
-/* El círculo lo dibuja tema.ts; aquí solo se apaga el fundido por defecto. */
-::view-transition-old(root),
-::view-transition-new(root) {
+/* Al pasar de un idioma al otro, la página nueva entra con un fundido corto. */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
+}
+
+::view-transition-group(root) {
+  animation-duration: var(--duracion-ui);
+}
+
+/* En el cambio de tema, el círculo lo dibuja tema.ts: se apaga el fundido por defecto. */
+html.transicion-tema::view-transition-old(root),
+html.transicion-tema::view-transition-new(root) {
   animation: none;
   mix-blend-mode: normal;
 }
 
-::view-transition-new(root) {
+html.transicion-tema::view-transition-new(root) {
   z-index: 2;
 }
 
@@ -185,8 +212,8 @@ html.cambiando-tema * {
 .icono-luna {
   position: absolute;
   transition:
-    opacity var(--duracion-media) var(--ease-salida),
-    transform var(--duracion-larga) var(--ease-salida);
+    opacity var(--duracion-ui) var(--ease-salida),
+    transform var(--duracion-media) var(--ease-salida);
 }
 
 .icono-luna,
@@ -475,6 +502,7 @@ html.cambiando-tema * {
 .letra {
   display: inline-block;
   font-weight: 800;
+  font-stretch: 112.5%;
 }
 
 @keyframes letra-entra {
@@ -482,12 +510,14 @@ html.cambiando-tema * {
     opacity: 0;
     transform: translate3d(0, 0.3em, 0);
     font-weight: 300;
+    font-stretch: 75%;
     filter: blur(8px);
   }
   to {
     opacity: 1;
     transform: none;
     font-weight: 800;
+    font-stretch: 112.5%;
     filter: blur(0);
   }
 }
@@ -814,8 +844,9 @@ html.cambiando-tema * {
   cursor: pointer;
   transform-origin: 50% 100%;
   backface-visibility: hidden;
+  /* Cierra en la mitad del tiempo: la respuesta del sistema no hace esperar. */
   transition:
-    transform var(--duracion-larga) var(--ease-movimiento),
+    transform 360ms var(--ease-movimiento),
     opacity var(--duracion-media) var(--ease-salida);
 }
 
@@ -853,6 +884,7 @@ html.cambiando-tema * {
 html:not(.js) .carpeta-frente {
   transform: rotateX(-80deg);
   pointer-events: none;
+  transition-duration: var(--duracion-larga), var(--duracion-media);
 }
 
 .carpeta[data-abierta="true"] .carpeta-hoja,
@@ -869,6 +901,7 @@ html:not(.js) .carpeta-hoja {
   .carpeta:hover .carpeta-frente {
     transform: rotateX(-80deg);
     pointer-events: none;
+    transition-duration: var(--duracion-larga), var(--duracion-media);
     transition-delay: 90ms;
   }
 

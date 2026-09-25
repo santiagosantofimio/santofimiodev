@@ -2,6 +2,10 @@
 import Boton from "@/componentes/Boton.astro";
 import Credencial from "@/componentes/Credencial.astro";
 import { perfil } from "@/datos/perfil";
+import { idiomaDe } from "@/i18n/idiomas";
+import { textos } from "@/i18n/textos";
+
+const t = textos[idiomaDe(Astro.currentLocale)];
 
 const [nombre, apellido] = perfil.nombre.split(" ");
 let indice = 0;
@@ -41,8 +45,8 @@ const lineas = [nombre, apellido].map((palabra) => [...palabra].map((letra) => (
       </p>
 
       <div class="entrada mt-10 grid gap-3 sm:flex sm:flex-wrap" style="--retraso: 820ms">
-        <Boton href="#proyectos" pieza="abajo" magnetico>Ver proyectos</Boton>
-        <Boton href={`mailto:${perfil.correo}`} variante="secundario" magnetico>Escríbeme</Boton>
+        <Boton href="#proyectos" pieza="abajo" magnetico>{t.hero.verProyectos}</Boton>
+        <Boton href={`mailto:${perfil.correo}`} variante="secundario" magnetico>{t.navegacion.escribeme}</Boton>
       </div>
     </div>
 

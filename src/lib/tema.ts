@@ -45,11 +45,17 @@ export function alternarTema(origen?: HTMLElement) {
   const y = caja.top + caja.height / 2;
   const radio = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
 
+  html.classList.add("transicion-tema");
   const transicion = document.startViewTransition(() => aplicar(siguiente));
-  transicion.ready.then(() => {
-    html.animate(
-      { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${radio}px at ${x}px ${y}px)`] },
-      { duration: 560, easing: "cubic-bezier(0.77, 0, 0.175, 1)", pseudoElement: "::view-transition-new(root)" },
-    );
-  });
+  transicion.finished.finally(() => html.classList.remove("transicion-tema"));
+  transicion.ready
+    .then(() => {
+      html.animate(
+        { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${radio}px at ${x}px ${y}px)`] },
+        { duration: 560, easing: "cubic-bezier(0.77, 0, 0.175, 1)", pseudoElement: "::view-transition-new(root)" },
+      );
+    })
+    // Si la persona navega antes de que termine (por ejemplo, cambia de idioma), la
+    // transición se cancela: el tema ya quedó aplicado y no hay nada más que hacer.
+    .catch(() => {});
 }

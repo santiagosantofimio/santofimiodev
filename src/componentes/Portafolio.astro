@@ -1,0 +1,26 @@
+---
+// La página completa. Las dos rutas (/ y /en/) la usan tal cual; cada componente
+// saca su idioma de Astro.currentLocale.
+import Base from "@/layouts/Base.astro";
+import Navbar from "@/componentes/Navbar.astro";
+import Hero from "@/componentes/Hero.astro";
+import SobreMi from "@/componentes/SobreMi.astro";
+import Proyectos from "@/componentes/Proyectos.astro";
+import Tecnologias from "@/componentes/Tecnologias.astro";
+import Principios from "@/componentes/Principios.astro";
+import Contacto from "@/componentes/Contacto.astro";
+import Footer from "@/componentes/Footer.astro";
+---
+
+<Base>
+  <Navbar />
+  <main id="contenido" tabindex="-1">
+    <Hero />
+    <SobreMi />
+    <Proyectos />
+    <Tecnologias />
+    <Principios />
+    <Contacto />
+  </main>
+  <Footer />
+</Base>

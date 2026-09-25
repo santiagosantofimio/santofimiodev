@@ -1,0 +1,19 @@
+---
+import { idiomaDe, rutas, type Idioma } from "@/i18n/idiomas";
+import { textos } from "@/i18n/textos";
+
+const idioma = idiomaDe(Astro.currentLocale);
+const otro: Idioma = idioma === "es" ? "en" : "es";
+const { corto, largo } = textos[idioma].navegacion.otroIdioma;
+---
+
+<a
+  href={rutas[otro]}
+  hreflang={otro}
+  lang={otro}
+  aria-label={largo}
+  title={largo}
+  class="boton boton-icono font-mono text-etiqueta font-semibold"
+>
+  {corto}
+</a>

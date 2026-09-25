@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { ArrowsClockwiseIcon, PlayIcon, StopIcon } from "@phosphor-icons/react";
+import type { Idioma } from "@/i18n/idiomas";
+import { textos } from "@/i18n/textos";
 import { nombres, pasos, type Algoritmo, type Paso } from "@/lib/ordenamiento";
 
 // Punto de partida fijo, igual en el servidor y en el navegador. "Mezclar" lo cambia.
@@ -17,7 +19,8 @@ function mezclar(valores: number[]) {
   return copia;
 }
 
-export default function OrdenarDemo() {
+export default function OrdenarDemo({ idioma }: { idioma: Idioma }) {
+  const t = textos[idioma].demo;
   const [algoritmo, setAlgoritmo] = useState<Algoritmo>("quick");
   const [estado, setEstado] = useState<Estado>("quieto");
   const [mensaje, setMensaje] = useState("");
@@ -42,7 +45,7 @@ export default function OrdenarDemo() {
     cancelAnimationFrame(animacion.current);
     marcar([]);
     setEstado("quieto");
-    setMensaje("Detenido.");
+    setMensaje(t.detenido);
   }
 
   function ordenar() {
@@ -64,11 +67,11 @@ export default function OrdenarDemo() {
     const terminar = () => {
       marcar([]);
       setEstado("listo");
-      setMensaje(`${nombres[algoritmo]}: ${comparaciones} comparaciones y ${escrituras} escrituras.`);
+      setMensaje(t.resultado(nombres[algoritmo], comparaciones, escrituras));
     };
 
     setEstado("ordenando");
-    setMensaje(`Ordenando con ${nombres[algoritmo]}.`);
+    setMensaje(t.ordenando(nombres[algoritmo]));
 
     // Con movimiento reducido se muestra el resultado sin la animación.
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
@@ -115,8 +118,8 @@ export default function OrdenarDemo() {
         ))}
       </div>
 
-      <fieldset className="mt-5" disabled={ordenando}>
-        <legend className="sr-only">Algoritmo</legend>
+      <fieldset className="mt-5 min-w-0" disabled={ordenando}>
+        <legend className="sr-only">{t.algoritmo}</legend>
         <div className="flex flex-wrap gap-1.5">
           {(Object.keys(nombres) as Algoritmo[]).map((clave) => (
             <label key={clave} className="chip">
@@ -137,11 +140,11 @@ export default function OrdenarDemo() {
       <div className="mt-4 flex flex-wrap items-center gap-2">
         <button type="button" className="boton boton-primario boton-compacto" onClick={ordenando ? detener : ordenar}>
           {ordenando ? <StopIcon size={16} aria-hidden /> : <PlayIcon size={16} aria-hidden />}
-          {ordenando ? "Detener" : "Ordenar"}
+          {ordenando ? t.detener : t.ordenar}
         </button>
         <button type="button" className="boton boton-secundario boton-compacto" onClick={reiniciar}>
           <ArrowsClockwiseIcon size={16} aria-hidden />
-          Mezclar
+          {t.mezclar}
         </button>
         <p aria-live="polite" className="text-pequeno text-texto-suave sm:ml-2">
           {mensaje}

@@ -18,7 +18,7 @@ export function iniciarCopiar() {
         return;
       }
       boton.dataset.copiado = "true";
-      if (aviso) aviso.textContent = "Correo copiado.";
+      if (aviso) aviso.textContent = boton.dataset.aviso ?? "";
       window.clearTimeout(espera);
       espera = window.setTimeout(() => {
         delete boton.dataset.copiado;

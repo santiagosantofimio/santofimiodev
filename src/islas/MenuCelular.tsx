@@ -1,4 +1,6 @@
 import { useEffect, useId, useRef, useState, type CSSProperties } from "react";
+import type { Idioma } from "@/i18n/idiomas";
+import { textos } from "@/i18n/textos";
 
 interface Enlace {
   href: string;
@@ -8,10 +10,11 @@ interface Enlace {
 interface Props {
   enlaces: Enlace[];
   correo: string;
-  textoCorreo: string;
+  idioma: Idioma;
 }
 
-export default function MenuCelular({ enlaces, correo, textoCorreo }: Props) {
+export default function MenuCelular({ enlaces, correo, idioma }: Props) {
+  const t = textos[idioma].navegacion;
   const [abierto, setAbierto] = useState(false);
   const idPanel = useId();
   const boton = useRef<HTMLButtonElement>(null);
@@ -56,7 +59,7 @@ export default function MenuCelular({ enlaces, correo, textoCorreo }: Props) {
         data-abierto={abierto}
         aria-expanded={abierto}
         aria-controls={idPanel}
-        aria-label={abierto ? "Cerrar menú" : "Abrir menú"}
+        aria-label={abierto ? t.cerrarMenu : t.abrirMenu}
         onClick={() => setAbierto((valor) => !valor)}
       >
         <span aria-hidden className="hamburguesa-linea" />
@@ -70,7 +73,7 @@ export default function MenuCelular({ enlaces, correo, textoCorreo }: Props) {
         inert={!abierto}
         className="panel-menu fixed inset-x-0 top-16 bottom-0 flex flex-col justify-between bg-fondo px-margen pt-8 pb-[calc(2rem+env(safe-area-inset-bottom))]"
       >
-        <nav aria-label="Menú">
+        <nav aria-label={t.menu}>
           <ul className="flex flex-col">
             {enlaces.map((enlace, indice) => (
               <li key={enlace.href} className="menu-item" style={{ "--i": indice } as CSSProperties}>
@@ -91,7 +94,7 @@ export default function MenuCelular({ enlaces, correo, textoCorreo }: Props) {
           className="menu-item boton boton-primario w-full"
           style={{ "--i": enlaces.length } as CSSProperties}
         >
-          {textoCorreo}
+          {t.escribeme}
         </a>
       </div>
     </>

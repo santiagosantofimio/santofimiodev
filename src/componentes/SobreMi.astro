@@ -3,6 +3,11 @@ import type { Icon } from "@phosphor-icons/react";
 import { CodeIcon, GraduationCapIcon, LaptopIcon } from "@phosphor-icons/react/ssr";
 import Carpeta from "@/componentes/Carpeta.astro";
 import { formacion, parrafos, type Formacion } from "@/datos/sobre-mi";
+import { idiomaDe } from "@/i18n/idiomas";
+import { textos } from "@/i18n/textos";
+
+const idioma = idiomaDe(Astro.currentLocale);
+const t = textos[idioma].sobreMi;
 
 const iconos: Record<Formacion["id"], Icon> = {
   universidad: GraduationCapIcon,
@@ -17,14 +22,14 @@ const giros = ["-2deg", "1.5deg", "-1deg"];
 <section id="sobre-mi" tabindex="-1" aria-labelledby="titulo-sobre-mi" class="scroll-mt-16 overflow-x-clip py-seccion">
   <div class="mx-auto grid max-w-[1400px] grid-cols-12 gap-x-6 gap-y-14 px-margen">
     <div class="col-span-12 lg:col-span-7">
-      <h2 id="titulo-sobre-mi" class="text-titulo-2 font-extrabold" data-aparece>Sobre mí</h2>
+      <h2 id="titulo-sobre-mi" class="text-titulo-2 font-extrabold" data-aparece>{t.titulo}</h2>
       <div class="mt-10 mb-8" data-aparece style="--retraso: 100ms">
-        <Carpeta titulo="Sobre mí" parrafos={parrafos} />
+        <Carpeta titulo={t.titulo} parrafos={parrafos.map((parrafo) => parrafo[idioma])} />
       </div>
     </div>
 
     <div class="col-span-12 lg:col-span-4 lg:col-start-9 lg:pt-24">
-      <h3 class="font-mono text-etiqueta text-texto-suave" data-aparece>Cómo aprendí</h3>
+      <h3 class="font-mono text-etiqueta text-texto-suave" data-aparece>{t.comoAprendi}</h3>
       <ul class="cascada mt-5 flex flex-col gap-3 lg:gap-0">
         {
           formacion.map((item, indice) => {
@@ -38,8 +43,8 @@ const giros = ["-2deg", "1.5deg", "-1deg"];
                         <Icono size={22} aria-hidden="true" />
                       </span>
                       <div>
-                        <p class="font-display text-entrada font-bold">{item.titulo}</p>
-                        <p class="text-pequeno text-texto-suave">{item.detalle}</p>
+                        <p class="font-display text-entrada font-bold">{item.titulo[idioma]}</p>
+                        <p class="text-pequeno text-texto-suave">{item.detalle[idioma]}</p>
                       </div>
                     </div>
                   </div>

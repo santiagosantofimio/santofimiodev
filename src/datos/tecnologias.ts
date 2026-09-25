@@ -1,14 +1,16 @@
+import type { Traducible } from "@/i18n/idiomas";
 import type { Logo } from "@/lib/logos";
 
 export interface Tecnologia {
-  nombre: string;
+  /** Texto fijo si el nombre es igual en los dos idiomas. */
+  nombre: string | Traducible;
   logo: Logo;
 }
 
 export interface Categoria {
   id: "frontend" | "backend" | "datos";
-  titulo: string;
-  etiqueta: string;
+  titulo: Traducible;
+  etiqueta: Traducible;
   tecnologias: Tecnologia[];
 }
 
@@ -16,8 +18,8 @@ export interface Categoria {
 export const categorias: Categoria[] = [
   {
     id: "frontend",
-    titulo: "Frontend",
-    etiqueta: "Interfaz · componentes",
+    titulo: { es: "Frontend", en: "Frontend" },
+    etiqueta: { es: "Interfaz · componentes", en: "Interface · components" },
     tecnologias: [
       { nombre: "HTML5", logo: "html5" },
       { nombre: "CSS3", logo: "css3" },
@@ -32,21 +34,21 @@ export const categorias: Categoria[] = [
   },
   {
     id: "backend",
-    titulo: "Backend",
-    etiqueta: "APIs · servicios",
+    titulo: { es: "Backend", en: "Backend" },
+    etiqueta: { es: "APIs · servicios", en: "APIs · services" },
     tecnologias: [
       { nombre: "Java", logo: "java" },
       { nombre: "Spring Boot", logo: "spring" },
       { nombre: "Maven", logo: "maven" },
-      { nombre: "JPA y Hibernate", logo: "hibernate" },
+      { nombre: { es: "JPA y Hibernate", en: "JPA & Hibernate" }, logo: "hibernate" },
       { nombre: "JUnit", logo: "junit" },
-      { nombre: "Lua y Luau", logo: "lua" },
+      { nombre: { es: "Lua y Luau", en: "Lua & Luau" }, logo: "lua" },
     ],
   },
   {
     id: "datos",
-    titulo: "Datos y DevOps",
-    etiqueta: "Persistencia · infra",
+    titulo: { es: "Datos y DevOps", en: "Data & DevOps" },
+    etiqueta: { es: "Persistencia · infra", en: "Persistence · infra" },
     tecnologias: [
       { nombre: "PostgreSQL", logo: "postgresql" },
       { nombre: "Docker", logo: "docker" },

@@ -1,13 +1,19 @@
 ---
+import CambiarIdioma from "@/componentes/CambiarIdioma.astro";
 import AlternarTema from "@/islas/AlternarTema";
 import MenuCelular from "@/islas/MenuCelular";
 import { perfil } from "@/datos/perfil";
+import { idiomaDe } from "@/i18n/idiomas";
+import { textos } from "@/i18n/textos";
+
+const idioma = idiomaDe(Astro.currentLocale);
+const t = textos[idioma].navegacion;
 
 const enlaces = [
-  { href: "#sobre-mi", texto: "Sobre mí" },
-  { href: "#proyectos", texto: "Proyectos" },
-  { href: "#tecnologias", texto: "Tecnologías" },
-  { href: "#contacto", texto: "Contacto" },
+  { href: "#sobre-mi", texto: t.sobreMi },
+  { href: "#proyectos", texto: t.proyectos },
+  { href: "#tecnologias", texto: t.tecnologias },
+  { href: "#contacto", texto: t.contacto },
 ];
 ---
 
@@ -23,10 +29,10 @@ const enlaces = [
         class="inline-flex size-7 items-center justify-center rounded-[0.3125rem] bg-acento text-[0.9375rem] font-extrabold text-sobre-acento"
         >S.</span
       >
-      {perfil.nombre}
+      <span class="hidden min-[400px]:inline">{perfil.nombre}</span>
     </a>
 
-    <nav aria-label="Principal" class="hidden lg:block">
+    <nav aria-label={t.etiqueta} class="hidden lg:block">
       <ul class="flex items-center gap-8">
         {
           enlaces.map((enlace) => (
@@ -43,13 +49,14 @@ const enlaces = [
       </ul>
     </nav>
 
-    <div class="flex items-center gap-2">
-      <AlternarTema client:idle />
+    <div class="flex items-center gap-1.5 sm:gap-2">
+      <CambiarIdioma />
+      <AlternarTema client:idle idioma={idioma} />
       <a href={`mailto:${perfil.correo}`} data-magnetico class="boton boton-primario boton-compacto hidden lg:inline-flex">
-        Escríbeme
+        {t.escribeme}
       </a>
       <div class="lg:hidden">
-        <MenuCelular client:media="(max-width: 1023px)" enlaces={enlaces} correo={perfil.correo} textoCorreo="Escríbeme" />
+        <MenuCelular client:media="(max-width: 1023px)" enlaces={enlaces} correo={perfil.correo} idioma={idioma} />
       </div>
     </div>
   </div>
