@@ -643,7 +643,7 @@ html.transicion-tema::view-transition-new(root) {
     repeating-linear-gradient(135deg, color-mix(in oklab, var(--tinta) 7%, transparent) 0 1px, transparent 1px 9px),
     color-mix(in oklab, var(--tinta) 6%, var(--papel));
   font-family: var(--font-display);
-  font-size: 4.5rem;
+  font-size: 3.5rem;
   font-weight: 800;
   letter-spacing: -0.05em;
   color: color-mix(in oklab, var(--tinta) 22%, var(--papel));
@@ -680,6 +680,21 @@ html.transicion-tema::view-transition-new(root) {
     opacity: 1;
     translate: 0 0;
   }
+}
+
+/* ---------- El logo: <S/> ---------- */
+.marca {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-stretch: 112.5%;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.marca-signo {
+  font-weight: 500;
+  color: color-mix(in oklab, currentColor 55%, transparent);
 }
 
 /* ---------- Tarjetas dobles: marco y núcleo ---------- */
@@ -857,7 +872,7 @@ html.transicion-tema::view-transition-new(root) {
   display: grid;
   place-items: center;
   font-family: var(--font-display);
-  font-size: clamp(4.5rem, 3rem + 6vw, 8rem);
+  font-size: clamp(3.5rem, 2.4rem + 4.6vw, 6.5rem);
   font-weight: 800;
   letter-spacing: -0.05em;
   color: color-mix(in oklab, var(--carpeta-frente) 84%, black);

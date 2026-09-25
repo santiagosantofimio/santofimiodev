@@ -1,0 +1,12 @@
+---
+// El logo: <S/>. La S lleva el color del texto y los signos van más tenues.
+interface Props {
+  class?: string;
+}
+
+const { class: clase } = Astro.props;
+---
+
+<span class:list={["marca", clase]} aria-hidden="true"
+  ><span class="marca-signo">&lt;</span>S<span class="marca-signo">/&gt;</span></span
+>

@@ -1,5 +1,6 @@
 ---
 import CambiarIdioma from "@/componentes/CambiarIdioma.astro";
+import Marca from "@/componentes/Marca.astro";
 import AlternarTema from "@/islas/AlternarTema";
 import MenuCelular from "@/islas/MenuCelular";
 import { perfil } from "@/datos/perfil";
@@ -23,12 +24,12 @@ const enlaces = [
   <div
     class="relative mx-auto flex h-full max-w-[1400px] items-center justify-between gap-6 px-margen"
   >
-    <a href="#inicio" class="flex min-h-11 items-center gap-2.5 font-display text-[1.0625rem] font-bold tracking-[-0.02em]">
-      <span
-        aria-hidden="true"
-        class="inline-flex size-7 items-center justify-center rounded-[0.3125rem] bg-acento text-[0.9375rem] font-extrabold text-sobre-acento"
-        >S.</span
-      >
+    <a
+      href="#inicio"
+      aria-label={perfil.nombre}
+      class="flex min-h-11 items-center gap-3 font-display text-[1.0625rem] font-bold tracking-[-0.02em]"
+    >
+      <Marca class="text-[1.375rem]" />
       <span class="hidden min-[400px]:inline">{perfil.nombre}</span>
     </a>
 

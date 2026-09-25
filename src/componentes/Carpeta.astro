@@ -1,5 +1,6 @@
 ---
 import { FolderSimpleIcon } from "@phosphor-icons/react/ssr";
+import Marca from "@/componentes/Marca.astro";
 import { idiomaDe } from "@/i18n/idiomas";
 import { textos } from "@/i18n/textos";
 
@@ -26,7 +27,7 @@ const t = textos[idiomaDe(Astro.currentLocale)].sobreMi;
   </div>
 
   <button type="button" class="carpeta-frente" aria-expanded="false" aria-controls={idHoja}>
-    <span class="carpeta-sello" aria-hidden="true">S.</span>
+    <span class="carpeta-sello" aria-hidden="true"><Marca /></span>
     <span class="flex items-center gap-3 font-display text-entrada font-bold">
       <FolderSimpleIcon size={22} aria-hidden="true" />
       {titulo}

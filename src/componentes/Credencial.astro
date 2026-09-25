@@ -2,6 +2,7 @@
 import { MapPinIcon } from "@phosphor-icons/react/ssr";
 import QRCode from "qrcode";
 import LogoMarca from "@/componentes/LogoMarca.astro";
+import Marca from "@/componentes/Marca.astro";
 import { perfil } from "@/datos/perfil";
 import type { Logo } from "@/lib/logos";
 import { idiomaDe } from "@/i18n/idiomas";
@@ -40,14 +41,11 @@ const idioma = idiomaDe(Astro.currentLocale);
 
         <div class="flex items-center justify-between font-mono text-[0.6875rem] text-tinta-suave">
           <span>santofimiodev</span>
-          <span
-            class="inline-flex size-6 items-center justify-center rounded-[0.25rem] bg-tinta font-display text-[0.6875rem] font-extrabold text-papel"
-            >S.</span
-          >
+          <Marca class="text-[0.9375rem] text-tinta" />
         </div>
 
         <div class="credencial-foto mt-4" aria-hidden="true">
-          <span>S.</span>
+          <Marca />
         </div>
 
         <p class="mt-5 font-display text-[1.625rem] leading-[1.05] font-extrabold tracking-[-0.03em]">
