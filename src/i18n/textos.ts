@@ -72,9 +72,6 @@ const es = {
     filas: { correo: "Correo", linkedin: "LinkedIn", github: "GitHub", whatsapp: "WhatsApp" },
     saludoWhatsapp: "Hola Santiago, vi tu página y quiero hablar contigo.",
   },
-  pie: {
-    codigo: "Código de esta página",
-  },
 };
 
 export type Textos = typeof es;
@@ -148,9 +145,6 @@ const en: Textos = {
     aviso: "Email copied.",
     filas: { correo: "Email", linkedin: "LinkedIn", github: "GitHub", whatsapp: "WhatsApp" },
     saludoWhatsapp: "Hi Santiago, I saw your website and I'd like to talk.",
-  },
-  pie: {
-    codigo: "Source code",
   },
 };
 
