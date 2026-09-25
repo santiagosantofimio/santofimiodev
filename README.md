@@ -26,9 +26,18 @@ npm run lint        # ESLint, incluidas reglas de accesibilidad
 npm run contraste   # verifica el contraste de todos los colores en los dos modos
 ```
 
+## Idiomas
+
+La página está en español en `/` y en inglés en `/en/`, con el i18n que trae Astro. El botón
+`EN`/`ES` de la barra de arriba lleva de una a la otra, y cada versión le avisa a los buscadores
+que existe la otra (`hreflang`). Al cambiar de idioma, la página nueva entra con un fundido corto.
+
 ## Cambiar los textos
 
-Todo el contenido vive en `src/datos/`, un archivo por tema. No hay que tocar componentes.
+Todo el contenido vive en `src/datos/`, un archivo por tema. No hay que tocar componentes. Cada
+texto lleva sus dos versiones juntas, `{ es: "…", en: "…" }`, así que traducir es editar la línea
+de al lado. Los textos cortos de la interfaz (botones, títulos de sección, etiquetas) están en
+`src/i18n/textos.ts`. Si a una versión le falta un texto, `npm run build` falla y dice cuál.
 
 | Qué quieres cambiar | Archivo |
 | --- | --- |
@@ -71,16 +80,17 @@ tarjetas son dobles: un marco de 12 px (`rounded-marco`) con un núcleo de 8 px 
 por 4 px, para que las curvas sean concéntricas. No hay píldoras. La única forma redonda son los
 iconos de "Cómo trabajo", que van en círculos para distinguir los pasos de las tarjetas.
 
-**Tipografía.** Schibsted Grotesk para títulos, Geist para el texto y JetBrains Mono para
-etiquetas y datos técnicos. Las tres se sirven desde el propio sitio con Fontsource. Schibsted es
-una fuente variable, y de eso depende el efecto del nombre en el inicio.
+**Tipografía.** Mona Sans para todo el texto, con su eje de ancho: ancha en los títulos y el
+nombre, normal en el cuerpo. Martian Mono para etiquetas y datos técnicos. Las dos se sirven desde
+el propio sitio con Fontsource. Como Mona Sans es variable en grosor y en ancho, el nombre del
+inicio puede engrosarse y ensancharse letra por letra según dónde esté el mouse.
 
 **Movimiento.** Sin librerías: CSS, IntersectionObserver y un poco de JavaScript. Dos curvas
 (`ease-salida` para lo que entra o sale, `ease-movimiento` para lo que se transforma en pantalla) y
 cuatro duraciones.
 
-- El nombre del inicio entra letra por letra y después cambia de grosor según la cercanía del
-  mouse. En pantallas táctiles, un toque manda una onda.
+- El nombre del inicio entra letra por letra y después cambia de grosor y de ancho según la
+  cercanía del mouse. En pantallas táctiles, un toque manda una onda.
 - Al lado del nombre cuelga una credencial de una cinta. Se puede agarrar y soltar (con mouse o
   con el dedo) y vuelve al centro oscilando como un péndulo; con el mouse encima se inclina y le
   cae un brillo. Su código QR, que abre LinkedIn, se genera al compilar con `qrcode`.
